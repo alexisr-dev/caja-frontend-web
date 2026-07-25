@@ -1,0 +1,20 @@
+services:
+  web:
+    build:
+      context: .
+      # Vite incrusta estas variables en el bundle durante el build, por eso
+      # van como build args y no en `environment`. Se leen del .env local.
+      args:
+        VITE_API_URL: ${VITE_API_URL:-/api}
+        VITE_MP_PUBLIC_KEY: ${VITE_MP_PUBLIC_KEY:-}
+        VITE_FIREBASE_API_KEY: ${VITE_FIREBASE_API_KEY:-}
+        VITE_FIREBASE_AUTH_DOMAIN: ${VITE_FIREBASE_AUTH_DOMAIN:-}
+        VITE_FIREBASE_PROJECT_ID: ${VITE_FIREBASE_PROJECT_ID:-}
+        VITE_FIREBASE_STORAGE_BUCKET: ${VITE_FIREBASE_STORAGE_BUCKET:-}
+        VITE_FIREBASE_MESSAGING_SENDER_ID: ${VITE_FIREBASE_MESSAGING_SENDER_ID:-}
+        VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID:-}
+        VITE_FIREBASE_VAPID_KEY: ${VITE_FIREBASE_VAPID_KEY:-}
+    container_name: caja_frontend
+    ports:
+      - "5173:8080"
+    restart: unless-stopped

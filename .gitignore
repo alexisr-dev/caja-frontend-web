@@ -1,0 +1,49 @@
+# ==========================================
+# Secretos y credenciales (NUNCA commitear)
+# ==========================================
+.env
+.env.*
+!.env.example
+
+# Certificados y llaves privadas
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# ==========================================
+# Dependencias y artefactos de build
+# ==========================================
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# ==========================================
+# Documentacion interna de desarrollo
+# (guias de trabajo, no forman parte del producto)
+# ==========================================
+0*_GUIA_*.md
+
+# ==========================================
+# IDEs / Herramientas
+# ==========================================
+.vscode/
+.idea/
+.claude/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# Logs y cache
+# ==========================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+coverage/

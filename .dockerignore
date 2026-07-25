@@ -1,0 +1,33 @@
+# Dependencias y artefactos (se generan dentro de la imagen)
+node_modules/
+dist/
+dist-ssr/
+
+# Secretos (NUNCA dentro de la imagen)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Git y herramientas
+.git/
+.gitignore
+.github/
+.claude/
+.vscode/
+.idea/
+
+# Documentacion interna
+0*_GUIA_*.md
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Logs y cache
+*.log
+npm-debug.log*
+.eslintcache
+coverage/
