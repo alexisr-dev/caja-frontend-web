@@ -18,10 +18,6 @@ export const formatFechaHora = (dateStr) => {
   return new Date(dateStr).toLocaleString(LOCALE, { ...OPCIONES_FECHA, ...OPCIONES_HORA })
 }
 
-/**
- * Variante sin coma separadora, para la cabecera de la boleta impresa donde
- * el ancho de 80 mm hace preferible el formato compacto.
- */
 export const formatFechaHoraCorta = (date) => {
   const d = date instanceof Date ? date : new Date(date)
   return `${d.toLocaleDateString(LOCALE, OPCIONES_FECHA)}  ${d.toLocaleTimeString(LOCALE, OPCIONES_HORA)}`

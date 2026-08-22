@@ -66,7 +66,7 @@ export default function UsuariosPage() {
   const { items: usuarios, loading, saving, errores, setErrores, guardar } =
     useRecursoCrud(usuariosApi, { mensajes: MENSAJES })
 
-  const [modal, setModal] = useState(null) // null | 'crear' | 'editar'
+  const [modal, setModal] = useState(null)
   const [seleccionado, setSeleccionado] = useState(null)
   const [formCrear, setFormCrear] = useState(FORM_CREAR_VACIO)
   const [formEditar, setFormEditar] = useState(FORM_EDITAR_VACIO)
@@ -249,7 +249,6 @@ export default function UsuariosPage() {
         </div>
       )}
 
-      {/* Alta */}
       <SlideOver
         open={modal === 'crear'}
         onClose={() => setModal(null)}
@@ -284,7 +283,6 @@ export default function UsuariosPage() {
         </form>
       </SlideOver>
 
-      {/* Edición */}
       <SlideOver
         open={modal === 'editar'}
         onClose={() => setModal(null)}

@@ -48,7 +48,6 @@ export default function ProveedoresPage() {
 
   const handleGuardar = async (e) => {
     e.preventDefault()
-    // El backend identifica al proveedor por su PK, no por el RUC.
     const exito = await guardar(form, seleccionado?.id ?? null)
     if (exito) setModalAbierto(false)
   }

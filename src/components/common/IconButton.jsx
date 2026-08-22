@@ -1,4 +1,3 @@
-/** Boton de accion compacto para las filas y tarjetas de los listados. */
 export default function IconButton({ icon: Icon, title, onClick, danger = false, size = 16 }) {
   return (
     <button

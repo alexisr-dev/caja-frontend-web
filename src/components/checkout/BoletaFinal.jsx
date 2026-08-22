@@ -5,7 +5,6 @@ import { ESTADO_PAGO, METODO_PAGO } from '../../utils/constants'
 import { etiquetarMetodo } from './metodosPago'
 import { imprimirBoleta } from './boletaImprimible'
 
-/** Comprobante en pantalla que se muestra al cerrar la venta. */
 export default function BoletaFinal({
   boleta,
   items,
@@ -28,7 +27,6 @@ export default function BoletaFinal({
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-5">
 
-      {/* Encabezado de éxito */}
       <div className={`rounded-2xl p-6 text-center ${pendiente ? 'bg-amber-50 border border-amber-200' : 'bg-green-50 border border-green-200'}`}>
         {pendiente
           ? <Clock size={48} className="mx-auto text-amber-500 mb-3" />
@@ -43,7 +41,6 @@ export default function BoletaFinal({
         )}
       </div>
 
-      {/* Boleta formal */}
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
 
         <div className="bg-gray-900 text-white px-5 py-4">
@@ -111,7 +108,6 @@ export default function BoletaFinal({
         </div>
       </div>
 
-      {/* Acciones */}
       <div className="flex flex-col gap-2">
         <button
           onClick={handleImprimir}

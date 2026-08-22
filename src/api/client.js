@@ -18,11 +18,6 @@ client.interceptors.request.use((config) => {
   return config
 })
 
-// ─── Refresco de token con cola ──────────────────────────────────────────────
-// Si varias peticiones reciben 401 a la vez, solo la primera pide un token
-// nuevo; las demas esperan en `pendientes` y se reintentan (o se rechazan)
-// cuando ese unico refresco termina.
-
 let refrescando = false
 let pendientes = []
 
@@ -38,7 +33,6 @@ const resolverPendientes = (error, token) => {
   pendientes = []
 }
 
-/** Cierra la sesion y devuelve al login cuando el refresh ya no es valido. */
 const forzarRelogin = () => {
   limpiarSesion()
   window.location.href = '/login'
@@ -48,8 +42,6 @@ const renovarAccessToken = async () => {
   const refresh = getRefreshToken()
   if (!refresh) throw new Error('No hay refresh token almacenado')
 
-  // Se usa `axios` plano, no `client`: esta peticion no debe pasar por el
-  // interceptor de respuesta y provocar un refresco recursivo.
   const { data } = await axios.post(`${env.apiUrl}/auth/refresh/`, { refresh })
   setAccessToken(data.access)
   return data.access
@@ -65,7 +57,6 @@ client.interceptors.response.use(
       return Promise.reject(error)
     }
 
-    // Ya hay un refresco en curso: encolar y reintentar cuando termine.
     if (refrescando) {
       return new Promise((resolve, reject) => {
         pendientes.push({ resolve, reject, config: { ...original, _reintentada: true } })

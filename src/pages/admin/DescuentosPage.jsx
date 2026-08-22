@@ -20,7 +20,6 @@ const MENSAJES = {
 
 const COLUMNAS = ['Producto', 'Tipo', 'Valor', 'Vigencia']
 
-/** Representacion legible del valor segun el tipo de descuento. */
 const formatearValor = (descuento) => {
   switch (descuento.tipo) {
     case TIPO_DESCUENTO.PORCENTAJE:

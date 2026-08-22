@@ -31,7 +31,6 @@ export default function TurnosPage() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {turnos.map(t => {
-                // El backend ya calcula la diferencia (null mientras el turno sigue abierto).
                 const diferencia = t.diferencia != null ? parseFloat(t.diferencia) : null
                 return (
                   <tr key={t.id} className="hover:bg-gray-50">

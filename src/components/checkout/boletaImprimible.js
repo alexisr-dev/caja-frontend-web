@@ -2,14 +2,6 @@ import { formatSoles, formatFechaHoraCorta } from '../../utils/formatters'
 import { etiquetarMetodo } from './metodosPago'
 import { METODO_PAGO } from '../../utils/constants'
 
-/**
- * Generacion del ticket imprimible (80 mm) en una ventana aparte.
- *
- * Vive fuera del componente porque es logica de presentacion en HTML plano,
- * sin React: mezclarla con el JSX del drawer hacia ese archivo el doble de
- * largo y muchisimo mas dificil de leer.
- */
-
 const filaProducto = (item) => `
     <tr>
       <td style="padding:3px 0">${item.cantidad}x ${item.nombre}</td>
@@ -26,8 +18,6 @@ const filaVuelto = (metodo, vuelto) => {
     </tr>`
 }
 
-// Se parte el cierre de etiqueta para que la cadena no termine el <script>
-// que la contiene si el bundle llegara a inlinearse dentro de un HTML.
 const CIERRE_SCRIPT = '<' + '/script>'
 
 const ESTILOS = `
@@ -53,7 +43,6 @@ const ESTILOS = `
       @page { size: 80mm auto; margin: 0; }
     }`
 
-/** Construye el documento HTML completo del ticket. */
 export function construirHtmlBoleta({ boleta, items, subtotalSinIgv, igvMonto, metodo, pagoData }) {
   const { texto: metodoTexto } = etiquetarMetodo(metodo)
   const fecha = formatFechaHoraCorta(new Date())
@@ -109,10 +98,6 @@ export function construirHtmlBoleta({ boleta, items, subtotalSinIgv, igvMonto, m
 </html>`
 }
 
-/**
- * Abre el ticket en una ventana emergente lista para imprimir.
- * @returns {boolean} false si el navegador bloqueo la ventana.
- */
 export function imprimirBoleta(datos) {
   const ventana = window.open(
     '', '_blank', 'width=340,height=600,toolbar=0,menubar=0,scrollbars=1',

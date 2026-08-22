@@ -1,7 +1,3 @@
-/**
- * Estado vacio de un listado: icono, mensaje y (opcionalmente) una accion.
- * Antes cada pantalla repetia este bloque con el mismo markup.
- */
 export default function EmptyState({ icon: Icon, titulo, descripcion, accion }) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 py-16 flex flex-col items-center text-center">

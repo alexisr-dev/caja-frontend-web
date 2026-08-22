@@ -13,7 +13,6 @@ export default function PagoEfectivo({ boleta, onExito }) {
   const vuelto = montoNum - total
   const suficiente = montoNum >= total
 
-  // Montos rápidos: exacto + billetes comunes mayores al total
   const sugerencias = [total, ...[10, 20, 50, 100, 200].filter(b => b > total)].slice(0, 5)
 
   const cobrar = async () => {
@@ -31,13 +30,11 @@ export default function PagoEfectivo({ boleta, onExito }) {
 
   return (
     <div className="space-y-5">
-      {/* Total a cobrar */}
       <div className="rounded-2xl bg-gray-50 border border-gray-100 px-4 py-3 flex items-center justify-between">
         <span className="text-sm text-gray-500">Total a cobrar</span>
         <span className="text-xl font-bold text-gray-900 tabular-nums">{formatSoles(total)}</span>
       </div>
 
-      {/* Monto recibido */}
       <div>
         <label className="text-sm font-medium text-gray-700 mb-1.5 block">Monto recibido</label>
         <div className="relative">
@@ -67,7 +64,6 @@ export default function PagoEfectivo({ boleta, onExito }) {
         </div>
       </div>
 
-      {/* Vuelto en vivo */}
       <div className={`rounded-2xl px-4 py-4 flex items-center justify-between transition-colors ${
         vuelto > 0 ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-100'
       }`}>
@@ -77,7 +73,6 @@ export default function PagoEfectivo({ boleta, onExito }) {
         </span>
       </div>
 
-      {/* Confirmar */}
       <button
         onClick={cobrar}
         disabled={loading || !suficiente}

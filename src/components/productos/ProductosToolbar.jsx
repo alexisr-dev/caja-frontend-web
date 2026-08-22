@@ -1,4 +1,4 @@
-import { Search, LayoutGrid, List } from 'lucide-react'
+import { Search, LayoutGrid, List, Archive } from 'lucide-react'
 
 const selectCls =
   'border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary'
@@ -15,6 +15,8 @@ export default function ProductosToolbar({
   onOrden,
   vista,
   onVista,
+  verEliminados,
+  onVerEliminados,
 }) {
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -50,6 +52,20 @@ export default function ProductosToolbar({
         <option value="stock_asc">Stock ↑</option>
         <option value="stock_desc">Stock ↓</option>
       </select>
+
+      <button
+        onClick={() => onVerEliminados(!verEliminados)}
+        title="Los productos eliminados se desactivan, no se borran"
+        aria-pressed={verEliminados}
+        className={`flex items-center gap-1.5 border rounded-lg px-3 py-2 text-sm transition-colors ${
+          verEliminados
+            ? 'border-primary bg-primary text-white'
+            : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+        }`}
+      >
+        <Archive size={16} />
+        Ver eliminados
+      </button>
 
       <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
         <button

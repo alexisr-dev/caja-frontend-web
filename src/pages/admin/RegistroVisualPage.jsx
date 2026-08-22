@@ -85,10 +85,8 @@ export default function RegistroVisualPage() {
 
       <div className="flex gap-6 items-start">
 
-        {/* Formulario de subida */}
         <div className="w-full max-w-md bg-white rounded-xl shadow-sm p-6 space-y-5">
 
-          {/* Buscador producto */}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-gray-700">Producto</label>
             <div className="relative">
@@ -124,7 +122,6 @@ export default function RegistroVisualPage() {
             </div>
           </div>
 
-          {/* Contador de foto */}
           {sku && (
             <div className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3">
               <div className="text-sm text-gray-600">
@@ -138,7 +135,6 @@ export default function RegistroVisualPage() {
             </div>
           )}
 
-          {/* Zona de subida */}
           <div
             onClick={() => inputRef.current?.click()}
             className="border-2 border-dashed border-gray-300 rounded-xl h-48 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors"
@@ -170,7 +166,6 @@ export default function RegistroVisualPage() {
           </Button>
         </div>
 
-        {/* Panel de instrucciones */}
         <div className="flex-1 bg-white rounded-xl shadow-sm p-6">
           <div className="flex items-center gap-2 mb-4">
             <Lightbulb size={18} className="text-yellow-500" />

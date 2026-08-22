@@ -11,7 +11,6 @@ import MetodoGrid from './MetodoGrid'
 import { getMetodoPago } from './metodosPago'
 import { useBoletaPendiente } from './useBoletaPendiente'
 
-/** Pasos del drawer que no corresponden a un medio de pago concreto. */
 const PASO = {
   SELECCION: 'metodo',
   EXITO: 'exito',
@@ -21,25 +20,13 @@ const TITULO_BASE = 'Cobrar venta'
 
 const SNAPSHOT_VACIO = { items: [], subtotalSinIgv: 0, igvMonto: 0 }
 
-/**
- * Panel lateral de cobro.
- *
- * Actua solo como orquestador del flujo (seleccion de medio → cobro → boleta):
- * el detalle de cada medio de pago lo aporta el registro `metodosPago`, el
- * comprobante lo pinta `BoletaFinal` y la boleta la gestiona
- * `useBoletaPendiente`.
- */
 export default function CobroDrawer({ open, onClose, onPagoExitoso }) {
-  // El total a cobrar se toma de la boleta ya creada en el backend, no del
-  // carrito: es el importe autoritativo (incluye descuentos aplicados alli).
   const { items, subtotalSinIgv, igvMonto, vaciar } = useCart()
 
   const [paso, setPaso] = useState(PASO.SELECCION)
   const [metodoUsado, setMetodoUsado] = useState(null)
   const [pagoFinal, setPagoFinal] = useState(null)
 
-  // Copia del carrito tomada justo antes de vaciarlo, para poder seguir
-  // mostrando (e imprimiendo) el detalle en la boleta final.
   const [snapshot, setSnapshot] = useState(SNAPSHOT_VACIO)
 
   const manejarFalloDeCreacion = () => {
@@ -49,7 +36,6 @@ export default function CobroDrawer({ open, onClose, onPagoExitoso }) {
 
   const { boleta, setBoleta, creando } = useBoletaPendiente(open, items, manejarFalloDeCreacion)
 
-  // Cada apertura del drawer arranca un cobro limpio.
   useEffect(() => {
     if (!open) return
     setPaso(PASO.SELECCION)
@@ -63,7 +49,6 @@ export default function CobroDrawer({ open, onClose, onPagoExitoso }) {
     onClose()
   }
 
-  /** Cobro aceptado: congela el carrito, lo vacia y muestra el comprobante. */
   const handleExito = (pagoData) => {
     setSnapshot({ items: [...items], subtotalSinIgv, igvMonto })
     setPagoFinal(pagoData)
@@ -111,7 +96,6 @@ export default function CobroDrawer({ open, onClose, onPagoExitoso }) {
     <div className={`h-full overflow-hidden transition-all duration-300 ease-out ${open ? 'w-[460px]' : 'w-0'}`}>
       <div className={`w-[460px] h-full bg-white border-l border-gray-200 shadow-xl flex flex-col transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}>
 
-        {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center gap-2 min-w-0">
             {mostrarVolver && (
@@ -125,7 +109,6 @@ export default function CobroDrawer({ open, onClose, onPagoExitoso }) {
             )}
             <h2 className="text-lg font-bold text-gray-900 truncate">{titulo}</h2>
           </div>
-          {/* Se oculta la X en la boleta final para evitar un cierre accidental. */}
           {!enExito && (
             <button
               onClick={handleClose}
@@ -137,7 +120,6 @@ export default function CobroDrawer({ open, onClose, onPagoExitoso }) {
           )}
         </div>
 
-        {/* Body */}
         <div className="overflow-y-auto flex-1 px-5 py-5">
           {cargandoBoleta ? (
             <Loader text="Generando boleta…" />

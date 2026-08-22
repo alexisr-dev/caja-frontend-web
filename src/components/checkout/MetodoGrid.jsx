@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { resolverOpciones } from './metodosPago'
 
-/** Icono del medio de pago: imagen si existe, con emoji como respaldo. */
 function MetodoIcono({ opcion }) {
   const [fallo, setFallo] = useState(false)
   const usarImagen = opcion.imagen && !fallo
@@ -20,7 +19,6 @@ function MetodoIcono({ opcion }) {
   )
 }
 
-/** Selector de medio de pago, construido desde el registro `metodosPago`. */
 export default function MetodoGrid({ total, onSeleccionar }) {
   const opciones = resolverOpciones(total)
 

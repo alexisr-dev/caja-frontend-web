@@ -22,7 +22,6 @@ export default function DescuentoForm({ descuento, onSubmit, loading }) {
       .catch(() => {})
   }, [])
 
-  // Al editar, precarga el nombre del producto en el buscador
   useEffect(() => {
     if (descuento) {
       reset(descuento)
@@ -33,7 +32,6 @@ export default function DescuentoForm({ descuento, onSubmit, loading }) {
     }
   }, [descuento, productos, reset])
 
-  // Cerrar dropdown al hacer click fuera
   useEffect(() => {
     const handler = (e) => {
       if (comboRef.current && !comboRef.current.contains(e.target)) {
@@ -56,10 +54,8 @@ export default function DescuentoForm({ descuento, onSubmit, loading }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-      {/* Buscador de producto */}
       <div className="flex flex-col gap-1">
         <label className="text-sm font-medium text-gray-700">Producto</label>
-        {/* Campo oculto que react-hook-form gestiona */}
         <input type="hidden" {...register('producto', { required: 'Selecciona un producto' })} />
         <div className="relative" ref={comboRef}>
           <input
@@ -93,7 +89,6 @@ export default function DescuentoForm({ descuento, onSubmit, loading }) {
         {errors.producto && <p className="text-xs text-red-500">{errors.producto.message}</p>}
       </div>
 
-      {/* Tipo de descuento */}
       <div className="flex flex-col gap-1">
         <label className="text-sm font-medium text-gray-700">Tipo de descuento</label>
         <select
@@ -106,7 +101,6 @@ export default function DescuentoForm({ descuento, onSubmit, loading }) {
         </select>
       </div>
 
-      {/* Campos según tipo */}
       {tipo === TIPO_DESCUENTO.PORCENTAJE && (
         <Input
           label="Porcentaje (%)"

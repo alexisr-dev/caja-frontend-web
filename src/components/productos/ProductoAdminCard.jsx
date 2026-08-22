@@ -1,12 +1,15 @@
-import { Pencil, Camera, GitBranch, TrendingUp, Trash2, ImageOff } from 'lucide-react'
+import { Pencil, Camera, GitBranch, TrendingUp, Trash2, RotateCcw, ImageOff } from 'lucide-react'
 import { formatSoles } from '../../utils/formatters'
 import StockBadge from './StockBadge'
 
-export default function ProductoAdminCard({ producto, onEditar, onFotos, onVariante, onHistorial, onEliminar }) {
+export default function ProductoAdminCard({ producto, onEditar, onFotos, onVariante, onHistorial, onEliminar, onRestaurar }) {
   const img = producto.imagen_principal ?? producto.primera_foto
+  const eliminado = producto.activo === false
 
   return (
-    <div className="group bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+    <div className={`group bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col hover:shadow-md transition-shadow ${
+      eliminado ? 'border-rose-200 opacity-70' : 'border-gray-100'
+    }`}>
       <div className="relative h-40 bg-white border-b border-gray-100 flex items-center justify-center p-3">
         {img ? (
           <img src={img} alt={producto.nombre} loading="lazy" className="max-w-full max-h-full object-contain" />
@@ -19,6 +22,11 @@ export default function ProductoAdminCard({ producto, onEditar, onFotos, onVaria
         <div className="absolute top-2 right-2">
           <StockBadge producto={producto} />
         </div>
+        {eliminado && (
+          <span className="absolute top-2 left-2 px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10px] font-semibold uppercase tracking-wide">
+            Eliminado
+          </span>
+        )}
       </div>
 
       <div className="p-4 flex-1 flex flex-col">
@@ -33,7 +41,9 @@ export default function ProductoAdminCard({ producto, onEditar, onFotos, onVaria
           <IconBtn icon={GitBranch} title="Nueva variante" onClick={() => onVariante(producto)} />
           <IconBtn icon={TrendingUp} title="Historial de precios" onClick={() => onHistorial(producto)} />
           <div className="flex-1" />
-          <IconBtn icon={Trash2} title="Eliminar" danger onClick={() => onEliminar(producto.sku)} />
+          {eliminado
+            ? <IconBtn icon={RotateCcw} title="Restaurar" onClick={() => onRestaurar(producto.sku)} />
+            : <IconBtn icon={Trash2} title="Eliminar" danger onClick={() => onEliminar(producto.sku)} />}
         </div>
       </div>
     </div>

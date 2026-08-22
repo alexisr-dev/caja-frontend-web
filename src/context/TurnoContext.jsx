@@ -5,19 +5,12 @@ import { useAuth } from './AuthContext'
 
 const TurnoContext = createContext(null)
 
-/**
- * Turno de caja abierto por el usuario actual.
- *
- * El backend responde 404 cuando no hay turno activo, asi que ese caso se
- * traduce a `turno = null` en lugar de propagarse como error.
- */
 export function TurnoProvider({ children }) {
   const { user } = useAuth()
   const [turno, setTurno] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Solo vendedores y admins tienen turnos: para el resto no se consulta.
     if (!user || !ROLES_CAJA.includes(user.rol)) {
       setTurno(null)
       setLoading(false)

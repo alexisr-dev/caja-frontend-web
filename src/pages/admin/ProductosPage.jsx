@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Plus, Pencil, Camera, GitBranch, TrendingUp, Trash2, ImageOff, PackageSearch, Package, AlertTriangle, XCircle, Wallet } from 'lucide-react'
+import { Plus, Pencil, Camera, GitBranch, TrendingUp, Trash2, RotateCcw, ImageOff, PackageSearch, Package, AlertTriangle, XCircle, Wallet } from 'lucide-react'
 import { getProductos, getProducto, crearProducto, actualizarProducto, eliminarProducto } from '../../api/productos'
 import { getCategorias } from '../../api/categorias'
+import { mensajeError } from '../../api/errores'
 import Modal from '../../components/common/Modal'
 import SlideOver from '../../components/common/SlideOver'
 import StatCard from '../../components/common/StatCard'
@@ -19,7 +20,12 @@ import IconButton from '../../components/common/IconButton'
 import { formatSoles } from '../../utils/formatters'
 import { toast } from 'react-toastify'
 
-/** Comparadores de la ordenacion en cliente. */
+const EtiquetaEliminado = () => (
+  <span className="ml-2 align-middle px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10px] font-semibold uppercase tracking-wide">
+    Eliminado
+  </span>
+)
+
 const ORDENADORES = {
   precio_asc: (a, b) => (a.precio ?? 0) - (b.precio ?? 0),
   precio_desc: (a, b) => (b.precio ?? 0) - (a.precio ?? 0),
@@ -34,23 +40,26 @@ export default function ProductosPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [busqueda, setBusqueda] = useState('')
-  const [modal, setModal] = useState(null) // null | 'crear' | 'editar' | 'fotos' | 'variante' | 'historial'
+  const [modal, setModal] = useState(null)
   const [seleccionado, setSeleccionado] = useState(null)
 
-  // Estado de UI del rediseño
-  const [vista, setVista] = useState('tabla') // 'tabla' | 'tarjetas'
+  const [vista, setVista] = useState('tabla')
   const [filtroCategoria, setFiltroCategoria] = useState('')
   const [filtroStock, setFiltroStock] = useState('todos')
   const [orden, setOrden] = useState('nombre')
+  const [verEliminados, setVerEliminados] = useState(false)
 
   const cargar = () => {
     setLoading(true)
-    getProductos({ search: busqueda || undefined })
+    getProductos({
+      search: busqueda || undefined,
+      activo: verEliminados ? undefined : true,
+    })
       .then(d => setProductos(d.results ?? d))
       .finally(() => setLoading(false))
   }
 
-  useEffect(() => { cargar() }, [busqueda])
+  useEffect(() => { cargar() }, [busqueda, verEliminados])
   useEffect(() => { getCategorias().then(d => setCategorias(d.results ?? d)).catch(() => {}) }, [])
 
   const normalizar = (data) => ({
@@ -65,8 +74,8 @@ export default function ProductosPage() {
       toast.success('Producto creado')
       setModal(null)
       cargar()
-    } catch {
-      toast.error('Error al crear producto')
+    } catch (err) {
+      toast.error(mensajeError(err, 'Error al crear producto'))
     } finally {
       setSaving(false)
     }
@@ -79,21 +88,31 @@ export default function ProductosPage() {
       toast.success('Producto actualizado')
       setModal(null)
       cargar()
-    } catch {
-      toast.error('Error al actualizar')
+    } catch (err) {
+      toast.error(mensajeError(err, 'Error al actualizar'))
     } finally {
       setSaving(false)
     }
   }
 
   const handleEliminar = async (sku) => {
-    if (!confirm(`¿Eliminar producto ${sku}?`)) return
+    if (!confirm(`¿Eliminar producto ${sku}?\n\nSe desactiva y deja de venderse, pero se conserva en las boletas ya emitidas. Puedes restaurarlo desde "Ver eliminados".`)) return
     try {
       await eliminarProducto(sku)
       toast.success('Producto eliminado')
       cargar()
-    } catch {
-      toast.error('Error al eliminar')
+    } catch (err) {
+      toast.error(mensajeError(err, 'Error al eliminar'))
+    }
+  }
+
+  const handleRestaurar = async (sku) => {
+    try {
+      await actualizarProducto(sku, { activo: true })
+      toast.success('Producto restaurado')
+      cargar()
+    } catch (err) {
+      toast.error(mensajeError(err, 'Error al restaurar'))
     }
   }
 
@@ -107,7 +126,6 @@ export default function ProductosPage() {
     setModal(tipo)
   }
 
-  // KPIs del inventario (cliente)
   const kpis = useMemo(() => {
     const total = productos.length
     const agotados = productos.filter(p => (p.stock ?? 0) <= 0).length
@@ -116,7 +134,6 @@ export default function ProductosPage() {
     return { total, agotados, bajos, valor }
   }, [productos])
 
-  // Filtro (categoría + estado de stock) y orden, en cliente
   const productosVisibles = useMemo(() => {
     let lista = productos
     if (filtroCategoria) lista = lista.filter(p => p.categoria_nombre === filtroCategoria)
@@ -129,7 +146,6 @@ export default function ProductosPage() {
 
   return (
     <div className="p-6 max-w-[1400px] mx-auto">
-      {/* Header */}
       <div className="flex items-start justify-between mb-6 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Productos</h1>
@@ -140,7 +156,6 @@ export default function ProductosPage() {
         </Button>
       </div>
 
-      {/* KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="Total productos" value={kpis.total} icon={Package} tone="default" />
         <StatCard label="Stock bajo" value={kpis.bajos} icon={AlertTriangle} tone="warning" hint="Igual o bajo el mínimo" />
@@ -148,7 +163,6 @@ export default function ProductosPage() {
         <StatCard label="Valor inventario" value={formatSoles(kpis.valor)} icon={Wallet} tone="success" />
       </div>
 
-      {/* Toolbar */}
       <div className="mb-4">
         <ProductosToolbar
           busqueda={busqueda}
@@ -162,6 +176,8 @@ export default function ProductosPage() {
           onOrden={setOrden}
           vista={vista}
           onVista={setVista}
+          verEliminados={verEliminados}
+          onVerEliminados={setVerEliminados}
         />
       </div>
 
@@ -169,7 +185,6 @@ export default function ProductosPage() {
         {loading ? 'Cargando…' : `${productosVisibles.length} ${productosVisibles.length === 1 ? 'producto' : 'productos'}`}
       </p>
 
-      {/* Contenido */}
       {loading ? (
         vista === 'tarjetas' ? <SkeletonCards /> : <SkeletonRows />
       ) : productosVisibles.length === 0 ? (
@@ -197,7 +212,7 @@ export default function ProductosPage() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {productosVisibles.map(p => (
-                <tr key={p.sku} className="hover:bg-gray-50/70 transition-colors">
+                <tr key={p.sku} className={`hover:bg-gray-50/70 transition-colors ${p.activo === false ? 'opacity-60' : ''}`}>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       {p.imagen_principal || p.primera_foto ? (
@@ -212,7 +227,10 @@ export default function ProductosPage() {
                         </div>
                       )}
                       <div className="min-w-0">
-                        <p className="font-medium text-gray-900 truncate">{p.nombre}</p>
+                        <p className="font-medium text-gray-900 truncate">
+                          {p.nombre}
+                          {p.activo === false && <EtiquetaEliminado />}
+                        </p>
                         <p className="font-mono text-xs text-gray-400">{p.sku}</p>
                       </div>
                     </div>
@@ -226,7 +244,9 @@ export default function ProductosPage() {
                       <IconButton icon={Camera} title="Fotos" onClick={() => abrir('fotos', p)} />
                       <IconButton icon={GitBranch} title="Nueva variante" onClick={() => abrir('variante', p)} />
                       <IconButton icon={TrendingUp} title="Historial de precios" onClick={() => abrir('historial', p)} />
-                      <IconButton icon={Trash2} title="Eliminar" danger onClick={() => handleEliminar(p.sku)} />
+                      {p.activo === false
+                        ? <IconButton icon={RotateCcw} title="Restaurar" onClick={() => handleRestaurar(p.sku)} />
+                        : <IconButton icon={Trash2} title="Eliminar" danger onClick={() => handleEliminar(p.sku)} />}
                     </div>
                   </td>
                 </tr>
@@ -245,12 +265,12 @@ export default function ProductosPage() {
               onVariante={(prod) => abrir('variante', prod)}
               onHistorial={(prod) => abrir('historial', prod)}
               onEliminar={handleEliminar}
+              onRestaurar={handleRestaurar}
             />
           ))}
         </div>
       )}
 
-      {/* Crear / Editar en panel lateral */}
       <SlideOver
         open={modal === 'crear' || editando}
         onClose={() => setModal(null)}

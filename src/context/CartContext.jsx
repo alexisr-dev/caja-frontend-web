@@ -3,12 +3,6 @@ import { desglosarTotales } from '../utils/calculos'
 
 const CartContext = createContext(null)
 
-/**
- * Carrito de la caja.
- *
- * Solo guarda los items; los totales son estado derivado y se calculan con
- * `utils/calculos` para no duplicar la formula del IGV.
- */
 export function CartProvider({ children }) {
   const [items, setItems] = useState([])
 
@@ -29,7 +23,6 @@ export function CartProvider({ children }) {
   }, [])
 
   const actualizarCantidad = useCallback((sku, cantidad) => {
-    // Bajar de 1 equivale a quitar el producto del carrito.
     if (cantidad <= 0) {
       setItems(prev => prev.filter(i => i.sku !== sku))
       return

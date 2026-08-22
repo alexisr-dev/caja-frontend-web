@@ -1,7 +1,3 @@
-/**
- * Placeholder de carga con forma de fila de tabla.
- * `avatar` usa un circulo (usuarios) en lugar de un cuadrado (productos).
- */
 export default function SkeletonRows({ filas = 8, avatar = false }) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
@@ -20,7 +16,6 @@ export default function SkeletonRows({ filas = 8, avatar = false }) {
   )
 }
 
-/** Variante en rejilla, para las vistas de tarjetas. */
 export function SkeletonCards({ tarjetas = 8 }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

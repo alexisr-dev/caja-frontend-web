@@ -4,14 +4,6 @@ import PagoEfectivo from './PagoEfectivo'
 import PagoMPTarjeta from './PagoMPTarjeta'
 import PagoMPYape from './PagoMPYape'
 
-/**
- * Registro de medios de pago (patron Strategy).
- *
- * Cada entrada declara como se presenta, cuando esta disponible y que
- * componente resuelve el cobro. El drawer solo orquesta: no conoce ningun
- * medio de pago en concreto, asi que agregar uno nuevo (p. ej. Plin) es
- * anadir un objeto a esta lista, sin tocar el resto del checkout.
- */
 export const METODOS_PAGO = [
   {
     id: METODO_PAGO.EFECTIVO,
@@ -53,8 +45,6 @@ export const METODOS_PAGO = [
     icono: '📱',
     imagen: '/yape.webp',
     componente: PagoMPYape,
-    // Mercado Pago rechaza los cobros por Yape por debajo del minimo, asi que
-    // se deshabilita la opcion en lugar de dejar fallar la peticion.
     subtitulo: (total) =>
       total >= YAPE_MONTO_MINIMO
         ? 'Pago rápido con código'
@@ -71,7 +61,6 @@ export const METODOS_PAGO = [
 
 export const getMetodoPago = (id) => METODOS_PAGO.find(m => m.id === id) ?? null
 
-/** Icono y texto del medio de pago tal como aparecen en la boleta impresa. */
 export const etiquetarMetodo = (id) => {
   const metodo = getMetodoPago(id)
   return metodo
@@ -79,7 +68,6 @@ export const etiquetarMetodo = (id) => {
     : { icono: '💳', texto: id }
 }
 
-/** Resuelve la lista de opciones ya evaluadas contra el total de la boleta. */
 export const resolverOpciones = (total) => {
   const monto = parseFloat(total) || 0
   return METODOS_PAGO.map(metodo => ({

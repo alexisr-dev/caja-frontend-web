@@ -1,21 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { extraerLista } from '../api/crudFactory'
+import { extraerCampos, mensajeError } from '../api/errores'
 
-/**
- * Ciclo de vida de una pantalla de administracion sobre un recurso REST.
- *
- * Las paginas de categorias, proveedores, descuentos y usuarios repetian el
- * mismo bloque: estado `items/loading/saving`, un `cargar()` que normaliza la
- * paginacion, y handlers de guardar/eliminar con toast y recarga. Todo eso
- * vive ahora aqui; la pantalla solo aporta el cliente del recurso y los textos.
- *
- * @param {object}   recurso        Cliente creado con `crearRecursoCrud`.
- * @param {object}   [opciones]
- * @param {object}   [opciones.params]    Query params de la carga inicial.
- * @param {object}   [opciones.mensajes]  Textos de exito/error por operacion.
- * @param {Function} [opciones.confirmar] Confirmacion previa al borrado.
- */
 export function useRecursoCrud(recurso, opciones = {}) {
   const {
     params,
@@ -28,8 +15,6 @@ export function useRecursoCrud(recurso, opciones = {}) {
   const [saving, setSaving] = useState(false)
   const [errores, setErrores] = useState({})
 
-  // `params` suele ser un literal nuevo en cada render: se serializa para que
-  // el efecto dependa de su contenido y no de su identidad.
   const paramsKey = JSON.stringify(params ?? null)
 
   const cargar = useCallback(async () => {
@@ -48,7 +33,6 @@ export function useRecursoCrud(recurso, opciones = {}) {
 
   useEffect(() => { cargar() }, [cargar])
 
-  /** Crea si no hay `id`, actualiza si lo hay. Devuelve true si tuvo exito. */
   const guardar = useCallback(async (data, id = null) => {
     setSaving(true)
     setErrores({})
@@ -63,9 +47,8 @@ export function useRecursoCrud(recurso, opciones = {}) {
       await cargar()
       return true
     } catch (err) {
-      const detalle = err.response?.data
-      if (detalle && typeof detalle === 'object') setErrores(detalle)
-      toast.error(mensajes.errorGuardar ?? 'Error al guardar')
+      setErrores(extraerCampos(err))
+      toast.error(mensajeError(err, mensajes.errorGuardar ?? 'Error al guardar'))
       return false
     } finally {
       setSaving(false)
@@ -80,8 +63,8 @@ export function useRecursoCrud(recurso, opciones = {}) {
       toast.success(mensajes.eliminado ?? 'Eliminado correctamente')
       await cargar()
       return true
-    } catch {
-      toast.error(mensajes.errorEliminar ?? 'Error al eliminar')
+    } catch (err) {
+      toast.error(mensajeError(err, mensajes.errorEliminar ?? 'Error al eliminar'))
       return false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -29,6 +29,11 @@ export default function CajaLayout() {
       <header className="bg-white shadow-sm px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold text-primary">Caja Registradora</h1>
+          {user?.es_demo && (
+            <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-medium">
+              DEMO
+            </span>
+          )}
           {turno && (
             <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
               Turno abierto

@@ -55,7 +55,6 @@ export default function PagoMPYape({ boleta, onExito }) {
 
   return (
     <div className="space-y-4">
-      {/* Total + marca Yape */}
       <div className="rounded-2xl bg-gradient-to-br from-[#742284] to-[#9B2FB0] text-white px-5 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img src="/yape.webp" alt="Yape" className="w-10 h-10 rounded-xl bg-white object-cover" />
@@ -72,7 +71,6 @@ export default function PagoMPYape({ boleta, onExito }) {
         </div>
       )}
 
-      {/* Pasos */}
       <ol className="space-y-2 bg-purple-50 border border-purple-100 rounded-2xl p-4">
         {[
           <>El cliente abre la app <b>Yape</b></>,
@@ -111,7 +109,6 @@ export default function PagoMPYape({ boleta, onExito }) {
         </details>
       )}
 
-      {/* Celular */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-gray-700">Celular del cliente</label>
         <input
@@ -124,7 +121,6 @@ export default function PagoMPYape({ boleta, onExito }) {
         />
       </div>
 
-      {/* OTP */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-gray-700">Código OTP (6 dígitos)</label>
         <input
@@ -138,7 +134,6 @@ export default function PagoMPYape({ boleta, onExito }) {
         />
       </div>
 
-      {/* Email */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-gray-700">Email del cliente</label>
         <input

@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/common/ProtectedRoute'
+import { TurnoProvider } from './context/TurnoContext'
 import AdminLayout from './components/layout/AdminLayout'
 import CajaLayout from './components/layout/CajaLayout'
 
@@ -47,7 +48,9 @@ export default function App() {
       </Route>
 
       <Route path="/caja" element={
-        <ProtectedRoute rolesPermitidos={['VENDEDOR', 'ADMIN']}><CajaLayout /></ProtectedRoute>
+        <ProtectedRoute rolesPermitidos={['VENDEDOR', 'ADMIN']}>
+          <TurnoProvider><CajaLayout /></TurnoProvider>
+        </ProtectedRoute>
       }>
         <Route index element={<CajaPage />} />
         <Route path="abrir-turno" element={<AbrirTurnoPage />} />

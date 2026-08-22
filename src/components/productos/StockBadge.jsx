@@ -1,6 +1,5 @@
 import { CheckCircle2, AlertTriangle, XCircle } from 'lucide-react'
 
-// Única fuente de verdad para el estado de stock (usada por badge, filtros y KPIs).
 export const stockStatus = (producto) => {
   const stock = producto.stock ?? 0
   const minimo = producto.stock_minimo ?? 0

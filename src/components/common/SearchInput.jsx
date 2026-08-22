@@ -1,6 +1,5 @@
 import { Search } from 'lucide-react'
 
-/** Campo de busqueda con icono, usado en las pantallas de listado. */
 export default function SearchInput({ value, onChange, placeholder = 'Buscar...', className = '' }) {
   return (
     <div className={`relative ${className}`}>

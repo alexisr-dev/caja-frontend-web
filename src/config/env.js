@@ -1,11 +1,3 @@
-/**
- * Unico punto de lectura de `import.meta.env`.
- *
- * Centralizarlo evita que el nombre de una variable quede escrito a mano en
- * media docena de modulos y permite validar en el arranque que la config
- * minima existe, en lugar de fallar con un 404 opaco en tiempo de ejecucion.
- */
-
 const leer = (clave, porDefecto = '') => import.meta.env[clave] ?? porDefecto
 
 export const env = {
@@ -15,6 +7,18 @@ export const env = {
     publicKey: leer('VITE_MP_PUBLIC_KEY'),
     get esSandbox() {
       return this.publicKey.startsWith('TEST-')
+    },
+  },
+
+  demo: {
+    activo: leer('VITE_DEMO_MODE') === 'true',
+    admin: {
+      email: leer('VITE_DEMO_ADMIN_EMAIL', 'demo.admin@cajasmart.dev'),
+      password: leer('VITE_DEMO_ADMIN_PASSWORD', 'DemoAdmin2025!'),
+    },
+    vendedor: {
+      email: leer('VITE_DEMO_VENDEDOR_EMAIL', 'demo.vendedor@cajasmart.dev'),
+      password: leer('VITE_DEMO_VENDEDOR_PASSWORD', 'DemoVendedor2025!'),
     },
   },
 
@@ -31,6 +35,5 @@ export const env = {
   esProduccion: import.meta.env.PROD,
 }
 
-/** true si la config de Firebase esta completa (si no, se omite el push). */
 export const firebaseConfigurado = () =>
   Boolean(env.firebase.apiKey && env.firebase.projectId && env.firebase.messagingSenderId)

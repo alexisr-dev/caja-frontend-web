@@ -19,7 +19,6 @@ export default function CajaPage() {
   const [modoCamera, setModoCamera] = useState(false)
   const [cobroAbierto, setCobroAbierto] = useState(false)
 
-  // Animación "fly to cart"
   const cameraWrapRef = useRef(null)
   const cartRef = useRef(null)
   const [voladores, setVoladores] = useState([])
@@ -29,7 +28,6 @@ export default function CajaPage() {
     if (!loadingTurno && !turno) navigate('/caja/abrir-turno', { replace: true })
   }, [turno, loadingTurno, navigate])
 
-  // Al salir de la caja se anula la boleta que hubiera quedado a medias.
   useEffect(() => {
     return () => { cancelarPendiente() }
   }, [])
@@ -49,7 +47,6 @@ export default function CajaPage() {
       from: { x: fr.left + fr.width / 2, y: fr.top + fr.height / 2 },
       to: { x: tr.left + tr.width / 2, y: tr.top + 36 },
     }])
-    // El pulso ocurre justo cuando la foto "aterriza" en el carrito
     setTimeout(() => {
       setCartPulse(true)
       setTimeout(() => setCartPulse(false), 450)
@@ -57,18 +54,15 @@ export default function CajaPage() {
   }
 
   const handleReconocido = (producto) => {
-    // Detección en vivo: agrega, lanza la animación y mantiene la cámara abierta
     agregarItem(producto)
     lanzarVuelo(producto)
   }
 
-  // Cierra el drawer cancelando la boleta pendiente en backend
   const handleCerrarCobro = async () => {
     setCobroAbierto(false)
     await cancelarPendiente()
   }
 
-  // Pago completado: el drawer ya vació el carrito y mostró la boleta
   const onPagoExitoso = (pagoData) => {
     setCobroAbierto(false)
     if (pagoData?.estado === 'PENDIENTE') {
@@ -80,7 +74,6 @@ export default function CajaPage() {
 
   return (
     <div className="flex h-full bg-gray-50">
-      {/* Panel principal: escáner IA */}
       <div className="relative flex-1 flex flex-col p-6 overflow-hidden">
         {cobroAbierto && (
           <div
@@ -89,7 +82,6 @@ export default function CajaPage() {
           />
         )}
 
-        {/* Encabezado */}
         <div className="flex items-start justify-between gap-4 mb-5">
           <div>
             <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -112,7 +104,6 @@ export default function CajaPage() {
           </button>
         </div>
 
-        {/* Área del escáner */}
         <div className="flex-1 flex items-center justify-center overflow-hidden">
           {modoCamera ? (
             <div ref={cameraWrapRef} className="w-full h-full flex items-center">
@@ -142,7 +133,6 @@ export default function CajaPage() {
         </div>
       </div>
 
-      {/* Carrito */}
       <aside
         ref={cartRef}
         className={`w-80 bg-white border-l border-gray-200 flex flex-col ${cartPulse ? 'animate-[cartPulse_450ms_ease]' : ''}`}
@@ -167,7 +157,6 @@ export default function CajaPage() {
         onPagoExitoso={onPagoExitoso}
       />
 
-      {/* Clones que vuelan al carrito al detectar un producto */}
       {voladores.map(v => (
         <FlyingImage
           key={v.id}

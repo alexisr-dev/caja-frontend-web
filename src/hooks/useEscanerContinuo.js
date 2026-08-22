@@ -4,22 +4,15 @@ import { escanearProducto } from '../api/ia'
 import { formatSoles } from '../utils/formatters'
 import { RESULTADO_IA } from '../utils/constants'
 
-// ── Parametros de calibracion del escaner ────────────────────────────────────
 export const CAP_W = 1280
 export const CAP_H = 720
 
-const INTERVALO_MS = 700   // espera entre ciclos; la tasa real la limita el "en vuelo"
-const VENTANA = 5          // frames que se acumulan para votar
-const VOTOS_MIN = 3        // coincidencias necesarias para confirmar
-const COOLDOWN_MS = 1800   // pausa tras agregar, para cambiar de producto
-const VACIO = '∅'          // centinela de frame sin producto reconocido
+const INTERVALO_MS = 700
+const VENTANA = 5
+const VOTOS_MIN = 3
+const COOLDOWN_MS = 1800
+const VACIO = '∅'
 
-/**
- * Etiqueta mas votada del historial, si alcanza el minimo de votos.
- *
- * La votacion por mayoria evita que un unico frame borroso agregue un producto
- * equivocado al carrito: hacen falta VOTOS_MIN lecturas coincidentes.
- */
 export function consenso(historial, votosMin = VOTOS_MIN) {
   if (historial.length < votosMin) return null
 
@@ -39,33 +32,18 @@ export function consenso(historial, votosMin = VOTOS_MIN) {
   return maxVotos >= votosMin ? ganadora : null
 }
 
-/**
- * Bucle de reconocimiento en vivo sobre una webcam.
- *
- * Captura un frame cada `INTERVALO_MS`, lo manda al backend y confirma un
- * producto solo cuando varios frames seguidos coinciden. Tras confirmar entra
- * en cooldown para que el vendedor pueda retirar el producto sin que se
- * duplique.
- *
- * @param {object}   webcamRef    Ref al componente `react-webcam`.
- * @param {Function} onReconocido Se invoca con el producto confirmado.
- * @param {boolean}  pausado      Suspende la deteccion (p. ej. cobro abierto).
- * @returns {{bbox, estado, etiqueta}} Estado para pintar el overlay.
- */
 export function useEscanerContinuo(webcamRef, onReconocido, pausado = false) {
   const [bbox, setBbox] = useState(null)
-  const [estado, setEstado] = useState('buscando') // 'buscando' | 'confirmado'
-  const [etiqueta, setEtiqueta] = useState(null)   // { nombre, confianza }
+  const [estado, setEstado] = useState('buscando')
+  const [etiqueta, setEtiqueta] = useState(null)
 
-  const enVueloRef = useRef(false)      // hay una peticion sin resolver
-  const historialRef = useRef([])       // ultimas N etiquetas (SKU o VACIO)
-  const pausaHastaRef = useRef(0)       // timestamp de fin del cooldown
-  const ultimoAgregadoRef = useRef(null) // anti-duplicado del ultimo SKU
+  const enVueloRef = useRef(false)
+  const historialRef = useRef([])
+  const pausaHastaRef = useRef(0)
+  const ultimoAgregadoRef = useRef(null)
   const timerRef = useRef(null)
   const montadoRef = useRef(true)
 
-  // Refs espejo: permiten que el bucle lea siempre el valor actual sin tener
-  // que recrearse (y perder su estado) en cada render.
   const pausadoRef = useRef(pausado)
   const onReconocidoRef = useRef(onReconocido)
 
@@ -96,9 +74,9 @@ export function useEscanerContinuo(webcamRef, onReconocido, pausado = false) {
     }
 
     const debeSaltarCiclo = () =>
-      pausadoRef.current ||                      // cobro abierto
-      Date.now() < pausaHastaRef.current ||      // cooldown tras agregar
-      enVueloRef.current                         // peticion anterior sin resolver
+      pausadoRef.current ||
+      Date.now() < pausaHastaRef.current ||
+      enVueloRef.current
 
     const procesarReconocimiento = (data) => {
       const producto = data.producto
@@ -127,8 +105,6 @@ export function useEscanerContinuo(webcamRef, onReconocido, pausado = false) {
       setBbox(null)
       setEstado('buscando')
       recordar(VACIO)
-      // Cuando el cuadro queda vacio de forma estable, se libera el
-      // anti-duplicado para poder volver a escanear el mismo producto.
       if (consenso(historialRef.current) === VACIO) {
         ultimoAgregadoRef.current = null
         setEtiqueta(null)
@@ -154,8 +130,6 @@ export function useEscanerContinuo(webcamRef, onReconocido, pausado = false) {
           procesarSinProducto()
         }
       } catch {
-        // Fallo de red en un frame suelto: se ignora para no spamear al
-        // vendedor; el siguiente ciclo reintenta.
       } finally {
         enVueloRef.current = false
         programar()

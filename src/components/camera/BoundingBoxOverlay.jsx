@@ -1,7 +1,6 @@
 import { CheckCircle2 } from 'lucide-react'
 import { CAP_W, CAP_H } from '../../hooks/useEscanerContinuo'
 
-/** Esquinas tipo corchete que enmarcan el producto detectado. */
 const ESQUINAS = [
   'top-0 left-0 border-t-[3px] border-l-[3px] rounded-tl-2xl',
   'top-0 right-0 border-t-[3px] border-r-[3px] rounded-tr-2xl',
@@ -9,16 +8,6 @@ const ESQUINAS = [
   'bottom-0 right-0 border-b-[3px] border-r-[3px] rounded-br-2xl',
 ]
 
-/**
- * Recuadro sobre el producto detectado.
- *
- * El bbox llega en pixeles del espacio de captura, asi que se convierte a
- * porcentajes para que siga al video sea cual sea su tamano en pantalla.
- *
- * @param {number[]} bbox        [x1, y1, x2, y2] en pixeles de captura.
- * @param {object}   etiqueta    { nombre, confianza } o null.
- * @param {boolean}  confirmado  true cuando el producto ya se agrego.
- */
 export default function BoundingBoxOverlay({ bbox, etiqueta, confirmado = false }) {
   if (!bbox) return null
 
@@ -32,7 +21,6 @@ export default function BoundingBoxOverlay({ bbox, etiqueta, confirmado = false 
         top: `${(bbox[1] / CAP_H) * 100}%`,
         width: `${((bbox[2] - bbox[0]) / CAP_W) * 100}%`,
         height: `${((bbox[3] - bbox[1]) / CAP_H) * 100}%`,
-        // Oscurece todo lo de fuera: efecto spotlight sobre el producto.
         boxShadow: '0 0 0 9999px rgba(0,0,0,0.30)',
       }}
     >
@@ -42,7 +30,6 @@ export default function BoundingBoxOverlay({ bbox, etiqueta, confirmado = false 
         <span key={i} className={`absolute w-7 h-7 ${posicion} ${acento}`} />
       ))}
 
-      {/* Linea de escaneo: solo mientras aun no hay confirmacion. */}
       {!confirmado && (
         <span className="absolute left-2 right-2 h-[3px] rounded-full bg-gradient-to-r from-transparent via-amber-300 to-transparent animate-[scanline_2.2s_ease-in-out_infinite]" />
       )}

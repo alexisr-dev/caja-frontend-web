@@ -15,8 +15,6 @@ const PUBLIC_KEY = env.mercadoPago.publicKey
 const IS_SANDBOX = env.mercadoPago.esSandbox
 const DOC_MAX_LENGTH = { DNI: 8, CE: 12, RUC: 11 }
 
-// Instancia perezosa del SDK de MP, compartida entre renders para no
-// reconstruirla en cada consulta de BIN.
 let _mpLookup = null
 const getMPLookup = () => {
   if (!_mpLookup && window.MercadoPago) {
@@ -25,7 +23,6 @@ const getMPLookup = () => {
   return _mpLookup
 }
 
-// ── Helpers de formato / marca ──────────────────────────────
 const soloDigitos = (v) => v.replace(/\D/g, '')
 
 const fmtNumero = (v) => soloDigitos(v).slice(0, 16).replace(/(.{4})/g, '$1 ').trim()
@@ -75,7 +72,6 @@ function BrandMarkWhite({ method }) {
   return <CreditCard size={26} className="text-white/70" />
 }
 
-// ── Tarjeta 3D con espejo en vivo + flip al CVV ─────────────
 function TarjetaPreview({ numero, nombre, expiry, cvv, brand, flip }) {
   const [tilt, setTilt] = useState({ rx: 0, ry: 0 })
 
@@ -105,7 +101,6 @@ function TarjetaPreview({ numero, nombre, expiry, cvv, brand, flip }) {
         className="relative w-full aspect-[1.6/1] [transform-style:preserve-3d] transition-transform duration-500 will-change-transform"
         style={{ transform }}
       >
-        {/* Frente */}
         <div className={`absolute inset-0 [backface-visibility:hidden] rounded-2xl bg-gradient-to-br ${tema} text-white p-5 shadow-xl shadow-gray-900/30 overflow-hidden`}>
           <div className="absolute -inset-x-10 -top-20 h-40 bg-white/10 rotate-12 blur-2xl pointer-events-none" />
           <div className="relative flex items-start justify-between">
@@ -125,7 +120,6 @@ function TarjetaPreview({ numero, nombre, expiry, cvv, brand, flip }) {
           </div>
         </div>
 
-        {/* Reverso */}
         <div className={`absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl bg-gradient-to-br ${tema} text-white shadow-xl shadow-gray-900/30 overflow-hidden`}>
           <div className="w-full h-9 bg-black/80 mt-5" />
           <div className="px-5 mt-4">
@@ -156,7 +150,6 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
     initMercadoPago(PUBLIC_KEY, { locale: 'es-PE' })
   }, [])
 
-  // Detección de marca/emisor por BIN para enviar payment_method_id al backend
   useEffect(() => {
     const digits = soloDigitos(form.numero)
     if (digits.length < 6) { setPaymentMethodId(''); setIssuerId(''); return }
@@ -172,7 +165,7 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
         setPaymentMethodId(m.id)
         const issuers = await mp.getIssuers({ paymentMethodId: m.id, bin })
         if (issuers?.[0] && activo) setIssuerId(String(issuers[0].id))
-      } catch { /* silencioso */ }
+      } catch { }
     })()
     return () => { activo = false }
   }, [form.numero])
@@ -241,7 +234,6 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
 
   return (
     <div className="space-y-5">
-      {/* Encabezado */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-[#009EE3]/10 text-[#009EE3] flex items-center justify-center shrink-0">
@@ -260,7 +252,6 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
         </div>
       </div>
 
-      {/* Tarjeta 3D con espejo en vivo */}
       <TarjetaPreview
         numero={form.numero}
         nombre={form.cardholderName}
@@ -284,7 +275,6 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
         </details>
       )}
 
-      {/* Número */}
       <div>
         <label className={labelCls}>Número de tarjeta</label>
         <div className={boxCls}>
@@ -300,7 +290,6 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
         </div>
       </div>
 
-      {/* Vencimiento + CVV */}
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className={labelCls}>Vencimiento</label>
@@ -332,7 +321,6 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
         </div>
       </div>
 
-      {/* Nombre */}
       <div>
         <label className={labelCls}>Nombre en la tarjeta</label>
         <div className={boxCls}>
@@ -346,7 +334,6 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
         </div>
       </div>
 
-      {/* Email */}
       <div>
         <label className={labelCls}>Email del pagador</label>
         <div className={boxCls}>
@@ -361,7 +348,6 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
         </div>
       </div>
 
-      {/* Documento */}
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className={labelCls}>Tipo doc.</label>
@@ -394,7 +380,6 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
         </div>
       </div>
 
-      {/* Resumen / garantías */}
       <div className="rounded-2xl bg-gray-50 border border-gray-100 p-4 flex items-center gap-3">
         <div className="w-11 h-11 rounded-xl bg-[#009EE3]/10 text-[#009EE3] flex items-center justify-center shrink-0">
           <ShoppingCart size={20} />
@@ -409,7 +394,6 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
         </div>
       </div>
 
-      {/* Botón */}
       <button
         onClick={cobrar}
         disabled={loading || !puedePagar}

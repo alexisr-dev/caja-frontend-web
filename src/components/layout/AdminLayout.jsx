@@ -39,7 +39,14 @@ export default function AdminLayout() {
     <div className="flex h-screen bg-gray-100">
       <aside className="w-64 bg-white shadow-lg flex flex-col">
         <div className="px-6 py-5 border-b">
-          <h1 className="text-xl font-bold text-primary">Caja Smart</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-bold text-primary">Caja Smart</h1>
+            {user?.es_demo && (
+              <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium">
+                DEMO
+              </span>
+            )}
+          </div>
           <p className="text-xs text-gray-500 mt-1">{user?.email}</p>
         </div>
 

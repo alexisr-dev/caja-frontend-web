@@ -1,6 +1,5 @@
 import client from './client'
 
-// El modo (CAJA/MOVIL) lo deriva el backend del rol del usuario: no se envia.
 export const escanearProducto = (imagenBlob) => {
   const fd = new FormData()
   fd.append('imagen', imagenBlob, 'frame.jpg')

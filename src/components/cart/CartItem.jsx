@@ -9,14 +9,12 @@ export default function CartItem({ item, bloqueado = false }) {
 
   return (
     <div className="flex gap-3 py-3 border-b last:border-0">
-      {/* Miniatura */}
       <div className="shrink-0 w-14 h-14 rounded-lg bg-white border border-gray-200 flex items-center justify-center overflow-hidden">
         {img
           ? <img src={img} alt={item.nombre} className="max-w-full max-h-full object-contain" />
           : <ImageOff size={18} className="text-gray-300" />}
       </div>
 
-      {/* Detalle */}
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
           <p className="text-sm font-medium leading-tight line-clamp-2">{item.nombre}</p>
@@ -32,7 +30,6 @@ export default function CartItem({ item, bloqueado = false }) {
         <p className="text-xs text-gray-400 mt-0.5">{item.sku} · {formatSoles(item.precio)} c/u</p>
 
         <div className="flex items-center justify-between mt-2">
-          {/* Control de cantidad */}
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => actualizarCantidad(item.sku, item.cantidad - 1)}
@@ -50,7 +47,6 @@ export default function CartItem({ item, bloqueado = false }) {
               +
             </button>
           </div>
-          {/* Total de la línea */}
           <span className="text-sm font-semibold text-gray-900">
             {formatSoles(parseFloat(item.precio) * item.cantidad)}
           </span>

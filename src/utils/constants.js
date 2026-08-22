@@ -1,14 +1,5 @@
-/**
- * Valores de dominio compartidos con el backend.
- *
- * IMPORTANTE: las claves de los enums deben coincidir *exactamente* con los
- * `TextChoices` de Django, porque viajan tal cual en la API y se usan tanto
- * para pintar como para filtrar (`?resultado=OK`).
- */
-
 export const IGV = 0.18
 
-/** Monto minimo que Mercado Pago acepta para un cobro por Yape. */
 export const YAPE_MONTO_MINIMO = 5.0
 
 export const ROLES = {
@@ -17,7 +8,6 @@ export const ROLES = {
   CLIENTE: 'CLIENTE',
 }
 
-/** Roles con acceso al modulo de caja (turnos, cobro, escaner). */
 export const ROLES_CAJA = [ROLES.VENDEDOR, ROLES.ADMIN]
 
 export const ESTADO_BOLETA = {
@@ -44,7 +34,6 @@ export const TIPO_DESCUENTO = {
   NXM: 'NXM',
 }
 
-/** Espeja `LogEscaneoIA.Resultado` del backend (ia_service/models.py). */
 export const RESULTADO_IA = {
   OK: 'OK',
   NO_DETECTADO: 'NO_DETECTADO',
@@ -75,7 +64,6 @@ export const NIVEL_ALERTA = {
   CRITICO: 'CRITICO',
 }
 
-/** Claves de almacenamiento del navegador, centralizadas para evitar colisiones. */
 export const STORAGE_KEYS = {
   ACCESS_TOKEN: 'access_token',
   REFRESH_TOKEN: 'refresh_token',

@@ -12,21 +12,17 @@ export default function NotificacionBell() {
   const cargar = async () => {
     try {
       const data = await getNotificaciones({ leida: 'false' })
-      // La API devuelve { results: [...] } con paginación o un array directo
       setNotifs(Array.isArray(data) ? data : (data.results ?? []))
     } catch {
-      // Sondeo periodico: un fallo puntual se ignora y se reintenta al ciclo siguiente.
     }
   }
 
   useEffect(() => {
     cargar()
-    // Refresca cada 30 segundos para capturar notificaciones nuevas
     const id = setInterval(cargar, 30_000)
     return () => clearInterval(id)
   }, [])
 
-  // Cierra el dropdown al hacer click fuera
   useEffect(() => {
     const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
     document.addEventListener('mousedown', handler)
@@ -60,7 +56,6 @@ export default function NotificacionBell() {
 
       {open && (
         <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-100 z-50">
-          {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
             <span className="text-sm font-semibold text-gray-800">Notificaciones</span>
             {noLeidas > 0 && (
@@ -73,7 +68,6 @@ export default function NotificacionBell() {
             )}
           </div>
 
-          {/* Lista */}
           <ul className="max-h-72 overflow-y-auto divide-y divide-gray-50">
             {notifs.length === 0 ? (
               <li className="px-4 py-6 text-center text-sm text-gray-400">Sin notificaciones</li>

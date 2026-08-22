@@ -1,6 +1,5 @@
 import { crearRecursoCrud } from './crudFactory'
 
-// El backend identifica al proveedor por su PK numerica, no por el RUC.
 export const proveedoresApi = crearRecursoCrud('/productos/proveedores')
 
 export const getProveedores = proveedoresApi.list

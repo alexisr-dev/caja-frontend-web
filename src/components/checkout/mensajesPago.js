@@ -1,12 +1,3 @@
-/**
- * Traduccion de los errores de Mercado Pago a mensajes para el vendedor.
- *
- * Antes estos diccionarios estaban duplicados (con divergencias) en el
- * componente de tarjeta y en el de Yape. Aqui se centraliza el vocabulario
- * comun y cada medio de pago aporta solo sus textos especificos.
- */
-
-/** `status_detail` que devuelve Mercado Pago, comunes a tarjeta y Yape. */
 const STATUS_DETAIL_COMUN = {
   accredited: 'Pago aprobado',
   cc_rejected_bad_filled_other: 'Datos incorrectos',
@@ -20,7 +11,6 @@ const STATUS_DETAIL_COMUN = {
   in_process: 'Pago en proceso',
 }
 
-/** Codigos de error propios del backend (`{ codigo: ... }`). */
 const CODIGO_COMUN = {
   email_pagador_prohibido: 'Email del pagador no permitido por Mercado Pago',
   credenciales_invalidas: 'Credenciales de MP inválidas — contacta al administrador',
@@ -73,7 +63,6 @@ export const MENSAJES_YAPE = {
   errorPorDefecto: 'Error procesando pago Yape',
 }
 
-/** Extrae el primer mensaje de un error de validacion DRF: `{ campo: ["msg"] }`. */
 export function extraerErrorDRF(data) {
   if (!data || typeof data !== 'object') return null
   for (const [campo, valor] of Object.entries(data)) {
@@ -83,16 +72,6 @@ export function extraerErrorDRF(data) {
   return null
 }
 
-/**
- * Decide que mensaje mostrar ante un fallo de pago.
- *
- * Recorre las fuentes de informacion de la mas especifica a la mas generica:
- * codigo del backend → status_detail de MP → error_code de MP → detail →
- * error de validacion DRF → mensaje del propio Error de JS.
- *
- * @param {Error}  error     Error de axios.
- * @param {object} mensajes  `MENSAJES_TARJETA` o `MENSAJES_YAPE`.
- */
 export function resolverErrorPago(error, mensajes) {
   const estado = error?.response?.status
   const data = error?.response?.data
@@ -114,9 +93,6 @@ export function resolverErrorPago(error, mensajes) {
   )
 }
 
-/**
- * Mensaje para una respuesta 200 que no es una aprobacion (pago en proceso).
- */
 export function mensajePagoEnProceso(data, mensajes) {
   return (
     mensajes.statusDetail[data?.status_detail] ??

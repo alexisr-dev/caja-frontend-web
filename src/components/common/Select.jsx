@@ -1,9 +1,3 @@
-/**
- * Select con el estilo estandar de la app.
- *
- * Reemplaza la constante `selectCls` que estaba copiada en varias pantallas.
- * Acepta `options` como `[{ value, label }]` o `children` para casos sueltos.
- */
 export default function Select({ label, options, className = '', children, ...props }) {
   const select = (
     <select
