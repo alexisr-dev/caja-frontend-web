@@ -60,9 +60,9 @@ jobs:
       # Las que falten quedan vacias: la imagen se construye igual, solo que
       # sin push (Firebase) o sin pagos con tarjeta (Mercado Pago).
       #
-      # VITE_API_URL lleva fallback explicito porque una variable no definida
-      # renderiza cadena vacia, y eso anularia el `ARG VITE_API_URL=/api` del
-      # Dockerfile en vez de dejarlo actuar.
+      # VITE_API_URL y VITE_DEMO_MODE llevan fallback explicito porque una
+      # variable no definida renderiza cadena vacia, y eso anularia el ARG por
+      # defecto del Dockerfile en vez de dejarlo actuar.
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
@@ -76,6 +76,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             VITE_API_URL=${{ vars.VITE_API_URL || 'https://caja.alexissramirez.com/api' }}
+            VITE_DEMO_MODE=${{ vars.VITE_DEMO_MODE || 'true' }}
             VITE_MP_PUBLIC_KEY=${{ secrets.VITE_MP_PUBLIC_KEY }}
             VITE_FIREBASE_API_KEY=${{ secrets.VITE_FIREBASE_API_KEY }}
             VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}

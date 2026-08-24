@@ -1,7 +1,9 @@
+# check=skip=SecretsUsedInArgOrEnv
+
 # ==========================================
 # Etapa 1 — Build del bundle con Vite
 # ==========================================
-FROM node:20-alpine AS build
+FROM node:24-alpine AS build
 
 WORKDIR /app
 
@@ -22,11 +24,13 @@ COPY . .
 # publicas (la public key de Mercado Pago, la config web de Firebase).
 #
 # NOTA: el linter de Docker avisa de "SecretsUsedInArgOrEnv" por los nombres
-# terminados en _KEY. Es un falso positivo: la configuracion web de Firebase
-# esta pensada para ser publica y de hecho se sirve dentro del bundle. Los
-# secretos reales (access token de Mercado Pago, API key del servicio de IA)
-# viven solo en el backend y nunca entran en esta imagen.
+# terminados en _KEY, y por eso el archivo empieza con `# check=skip=...`. Es
+# un falso positivo: la configuracion web de Firebase esta pensada para ser
+# publica y de hecho se sirve dentro del bundle, igual que la VAPID key
+# publica (la privada vive en el backend). Los secretos reales (access token
+# de Mercado Pago, API key del servicio de IA) nunca entran en esta imagen.
 ARG VITE_API_URL=/api
+ARG VITE_DEMO_MODE=false
 ARG VITE_MP_PUBLIC_KEY=
 ARG VITE_FIREBASE_API_KEY=
 ARG VITE_FIREBASE_AUTH_DOMAIN=
@@ -37,6 +41,7 @@ ARG VITE_FIREBASE_APP_ID=
 ARG VITE_FIREBASE_VAPID_KEY=
 
 ENV VITE_API_URL=$VITE_API_URL \
+    VITE_DEMO_MODE=$VITE_DEMO_MODE \
     VITE_MP_PUBLIC_KEY=$VITE_MP_PUBLIC_KEY \
     VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY \
     VITE_FIREBASE_AUTH_DOMAIN=$VITE_FIREBASE_AUTH_DOMAIN \
@@ -62,7 +67,7 @@ RUN sed -i \
 # ==========================================
 # Etapa 2 — Servir los estaticos con Nginx
 # ==========================================
-FROM nginx:1.27-alpine
+FROM nginx:1.31-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
