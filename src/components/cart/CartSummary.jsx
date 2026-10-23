@@ -13,7 +13,7 @@ export default function CartSummary({ bloqueado = false, onCobrar }) {
   }
 
   return (
-    <div className="border-t border-gray-100 px-5 py-4 bg-white">
+    <div className="border-t border-gray-200 px-5 py-4 bg-white rounded-b-2xl">
       <div className="space-y-1.5">
         <div className="flex justify-between text-sm text-gray-500">
           <span>Subtotal (sin IGV)</span>
@@ -25,9 +25,9 @@ export default function CartSummary({ bloqueado = false, onCobrar }) {
         </div>
       </div>
 
-      <div className="flex items-baseline justify-between mt-3 pt-3 border-t border-dashed border-gray-200">
-        <span className="text-sm font-medium text-gray-500">Total</span>
-        <span className="text-2xl font-bold text-gray-900 tabular-nums">{formatSoles(total)}</span>
+      <div className={`tag-price mt-3.5 flex items-center justify-between pr-5 py-2.5 ${items.length === 0 ? 'tag-price-muted' : ''}`}>
+        <span className="text-[15px] font-extrabold">Total</span>
+        <span className="font-display text-[52px] font-black leading-none tabular-nums">{formatSoles(total)}</span>
       </div>
 
       <div className="flex gap-2 mt-4">
@@ -35,16 +35,17 @@ export default function CartSummary({ bloqueado = false, onCobrar }) {
           onClick={handleLimpiar}
           disabled={vacio}
           title="Vaciar carrito"
-          className="shrink-0 flex items-center justify-center w-11 rounded-xl border border-gray-200 text-gray-400 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-400 disabled:hover:border-gray-200"
+          aria-label="Vaciar carrito"
+          className="shrink-0 flex items-center justify-center w-14 h-14 rounded-xl bg-sunk text-gray-500 hover:text-err hover:bg-err-bg transition-[background-color,color,transform] duration-150 active:scale-[0.97] disabled:opacity-45 disabled:cursor-not-allowed disabled:hover:bg-sunk disabled:hover:text-gray-500 disabled:active:scale-100"
         >
-          <Trash2 size={18} />
+          <Trash2 size={20} />
         </button>
         <button
           onClick={onCobrar}
           disabled={vacio}
-          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-green-600"
+          className="flex-1 h-14 flex items-center justify-center gap-2.5 rounded-xl bg-ok text-white text-[17px] font-extrabold hover:bg-[#106532] transition-[background-color,transform] duration-150 active:scale-[0.97] disabled:opacity-45 disabled:cursor-not-allowed disabled:hover:bg-ok disabled:active:scale-100"
         >
-          <CreditCard size={18} />
+          <CreditCard size={20} />
           Cobrar
           {!vacio && <span className="tabular-nums">· {formatSoles(total)}</span>}
         </button>

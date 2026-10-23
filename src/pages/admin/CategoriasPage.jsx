@@ -58,17 +58,17 @@ export default function CategoriasPage() {
   }, [categorias, busqueda])
 
   const botonNueva = (
-    <Button variant="primary" onClick={abrirCrear}>
-      <Plus size={16} className="mr-1.5" /> Nueva categoría
+    <Button variant="primary" size="lg" onClick={abrirCrear}>
+      <Plus size={18} className="mr-1.5" /> Nueva categoría
     </Button>
   )
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto">
-      <div className="flex items-start justify-between mb-6 gap-4">
+    <div className="p-8 max-w-[1400px] mx-auto">
+      <div className="flex items-end justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Categorías</h1>
-          <p className="text-sm text-gray-500 mt-1">Organiza tu catálogo en categorías</p>
+          <h1 className="page-title">Categorías</h1>
+          <p className="text-[15px] text-gray-500 mt-2">Organiza tu catálogo en categorías</p>
         </div>
         {botonNueva}
       </div>
@@ -89,11 +89,11 @@ export default function CategoriasPage() {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center gap-3 animate-pulse">
-              <div className="w-11 h-11 rounded-lg bg-gray-100 shrink-0" />
+            <div key={i} className="panel p-4 flex items-center gap-3 animate-pulse">
+              <div className="w-[52px] h-[52px] rounded-[14px] bg-sunk shrink-0" />
               <div className="flex-1 space-y-2">
-                <div className="h-4 bg-gray-100 rounded w-1/2" />
-                <div className="h-3 bg-gray-100 rounded w-3/4" />
+                <div className="h-4 bg-sunk rounded-lg w-1/2" />
+                <div className="h-3 bg-sunk rounded-lg w-3/4" />
               </div>
             </div>
           ))}
@@ -108,21 +108,21 @@ export default function CategoriasPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {categoriasVisibles.map(categoria => (
-            <div key={categoria.id} className="group bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-start gap-3 hover:shadow-md transition-shadow">
-              <div className="shrink-0 w-11 h-11 rounded-lg bg-sky-50 text-primary flex items-center justify-center">
+            <div key={categoria.id} className="group panel p-4 flex items-center gap-3.5 transition-[box-shadow,border-color] duration-150 hover:border-primary hover:shadow-[0_0_0_3px_rgba(14,165,233,0.16)]">
+              <div className="shrink-0 w-[52px] h-[52px] rounded-[14px] bg-sky-100 text-primary flex items-center justify-center">
                 {categoria.imagen_icono
-                  ? <img src={categoria.imagen_icono} alt="" className="w-7 h-7 object-contain" />
-                  : <FolderTree size={20} />}
+                  ? <img src={categoria.imagen_icono} alt="" className="w-8 h-8 object-contain" />
+                  : <FolderTree size={24} />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 truncate">{categoria.nombre}</p>
-                <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">
+                <p className="text-[17px] font-extrabold text-gray-900 truncate">{categoria.nombre}</p>
+                <p className="text-[13.5px] text-gray-500 mt-0.5 line-clamp-2">
                   {categoria.descripcion || 'Sin descripción'}
                 </p>
               </div>
-              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <IconButton icon={Pencil} title="Editar" onClick={() => abrirEditar(categoria)} size={15} />
-                <IconButton icon={Trash2} title="Eliminar" danger onClick={() => eliminar(categoria.id)} size={15} />
+              <div className="flex gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                <IconButton icon={Pencil} title="Editar" onClick={() => abrirEditar(categoria)} size={16} />
+                <IconButton icon={Trash2} title="Eliminar" danger onClick={() => eliminar(categoria.id)} size={16} />
               </div>
             </div>
           ))}

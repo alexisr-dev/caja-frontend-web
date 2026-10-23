@@ -30,15 +30,15 @@ export default function PagoEfectivo({ boleta, onExito }) {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl bg-gray-50 border border-gray-100 px-4 py-3 flex items-center justify-between">
-        <span className="text-sm text-gray-500">Total a cobrar</span>
-        <span className="text-xl font-bold text-gray-900 tabular-nums">{formatSoles(total)}</span>
+      <div className="rounded-2xl bg-sunk px-[18px] py-3.5 flex items-center justify-between">
+        <span className="text-[15px] font-bold text-gray-500">Total a cobrar</span>
+        <span className="font-display text-[44px] font-black leading-none text-gray-900 tabular-nums">{formatSoles(total)}</span>
       </div>
 
       <div>
-        <label className="text-sm font-medium text-gray-700 mb-1.5 block">Monto recibido</label>
+        <label className="field-label mb-2 block text-sm">Monto recibido</label>
         <div className="relative">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">S/</span>
+          <span className="absolute left-5 top-1/2 -translate-y-1/2 font-display text-[34px] font-bold text-gray-400">S/</span>
           <input
             type="number"
             step="0.10"
@@ -47,16 +47,16 @@ export default function PagoEfectivo({ boleta, onExito }) {
             value={monto}
             onChange={e => setMonto(e.target.value)}
             autoFocus
-            className="w-full pl-11 pr-4 py-3.5 text-2xl font-bold text-gray-900 tabular-nums border-2 border-gray-200 rounded-2xl outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/10 transition"
+            className="w-full h-[88px] pl-16 pr-5 font-display text-[60px] font-black text-gray-900 tabular-nums border-2 border-gray-300 rounded-2xl outline-none focus:border-primary focus:ring-4 focus:ring-sky-500/15 transition-[border-color,box-shadow] duration-150"
           />
         </div>
-        <div className="flex flex-wrap gap-2 mt-3">
+        <div className="grid grid-cols-4 gap-2 mt-3">
           {sugerencias.map((s, i) => (
             <button
               key={i}
               type="button"
               onClick={() => setMonto(s.toFixed(2))}
-              className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:border-green-400 hover:text-green-700 hover:bg-green-50 transition-colors tabular-nums"
+              className="h-11 rounded-xl bg-sunk text-sm font-extrabold text-gray-900 hover:bg-navy hover:text-white transition-[background-color,color,transform] duration-150 active:scale-[0.97] tabular-nums"
             >
               {i === 0 ? 'Exacto' : formatSoles(s)}
             </button>
@@ -64,11 +64,11 @@ export default function PagoEfectivo({ boleta, onExito }) {
         </div>
       </div>
 
-      <div className={`rounded-2xl px-4 py-4 flex items-center justify-between transition-colors ${
-        vuelto > 0 ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-100'
+      <div className={`rounded-2xl px-[22px] py-3 flex items-center justify-between transition-colors duration-150 ${
+        vuelto > 0 ? 'bg-ok-deep text-white' : 'bg-sunk text-gray-400'
       }`}>
-        <span className={`text-sm font-medium ${vuelto > 0 ? 'text-green-700' : 'text-gray-400'}`}>Vuelto</span>
-        <span className={`text-2xl font-extrabold tabular-nums ${vuelto > 0 ? 'text-green-600' : 'text-gray-300'}`}>
+        <span className="font-display text-[34px] font-black uppercase tracking-wide leading-none">Vuelto</span>
+        <span className={`font-display text-[72px] font-black leading-none tabular-nums ${vuelto > 0 ? 'text-gold' : ''}`}>
           {formatSoles(vuelto > 0 ? vuelto : 0)}
         </span>
       </div>
@@ -76,11 +76,11 @@ export default function PagoEfectivo({ boleta, onExito }) {
       <button
         onClick={cobrar}
         disabled={loading || !suficiente}
-        className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-green-600 text-white font-bold hover:bg-green-700 transition-colors shadow-sm shadow-green-600/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-green-600"
+        className="w-full flex items-center justify-center gap-2.5 h-[60px] rounded-2xl bg-ok text-white text-lg font-extrabold hover:bg-[#106532] transition-[background-color,transform] duration-150 active:scale-[0.98] disabled:opacity-45 disabled:cursor-not-allowed disabled:hover:bg-ok disabled:active:scale-100"
       >
-        <Banknote size={18} />
+        <Banknote size={22} />
         {loading ? 'Procesando…' : 'Confirmar cobro'}
-        {!loading && suficiente && <ArrowRight size={18} />}
+        {!loading && suficiente && <ArrowRight size={22} />}
       </button>
     </div>
   )

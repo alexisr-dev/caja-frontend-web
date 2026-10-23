@@ -69,10 +69,10 @@ export default function ProductoForm({ producto, onSubmit, loading }) {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-gray-700">Categoría</label>
+        <div className="flex flex-col gap-1.5">
+          <label className="field-label">Categoría</label>
           <select
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="field w-full cursor-pointer"
             {...register('categoria')}
           >
             <option value="">Sin categoría</option>
@@ -81,10 +81,10 @@ export default function ProductoForm({ producto, onSubmit, loading }) {
             ))}
           </select>
         </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-gray-700">Proveedor</label>
+        <div className="flex flex-col gap-1.5">
+          <label className="field-label">Proveedor</label>
           <select
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="field w-full cursor-pointer"
             {...register('proveedor')}
           >
             <option value="">Sin proveedor</option>

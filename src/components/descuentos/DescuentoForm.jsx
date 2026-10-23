@@ -54,8 +54,8 @@ export default function DescuentoForm({ descuento, onSubmit, loading }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-gray-700">Producto</label>
+      <div className="flex flex-col gap-1.5">
+        <label className="field-label">Producto</label>
         <input type="hidden" {...register('producto', { required: 'Selecciona un producto' })} />
         <div className="relative" ref={comboRef}>
           <input
@@ -65,10 +65,10 @@ export default function DescuentoForm({ descuento, onSubmit, loading }) {
             onFocus={() => setMostrarLista(true)}
             placeholder="Buscar por nombre o SKU..."
             autoComplete="off"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="field w-full"
           />
           {mostrarLista && productosFiltrados.length > 0 && (
-            <ul className="absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-48 overflow-y-auto">
+            <ul className="absolute z-20 w-full bg-white border border-gray-200 rounded-xl shadow-pop mt-1.5 max-h-52 overflow-y-auto p-1.5 animate-pop-in">
               {productosFiltrados.map((p) => (
                 <li
                   key={p.sku}
@@ -77,22 +77,22 @@ export default function DescuentoForm({ descuento, onSubmit, loading }) {
                     setBusqueda(`${p.nombre} (${p.sku})`)
                     setMostrarLista(false)
                   }}
-                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                  className="px-3 py-2.5 text-sm rounded-lg hover:bg-sky-50 cursor-pointer flex items-center justify-between"
                 >
-                  <span>{p.nombre}</span>
-                  <span className="text-gray-400 text-xs ml-2 shrink-0">{p.sku}</span>
+                  <span className="font-bold">{p.nombre}</span>
+                  <span className="text-gray-500 text-xs ml-2 shrink-0 tabular-nums">{p.sku}</span>
                 </li>
               ))}
             </ul>
           )}
         </div>
-        {errors.producto && <p className="text-xs text-red-500">{errors.producto.message}</p>}
+        {errors.producto && <p className="text-[13px] font-bold text-err">{errors.producto.message}</p>}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-gray-700">Tipo de descuento</label>
+      <div className="flex flex-col gap-1.5">
+        <label className="field-label">Tipo de descuento</label>
         <select
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+          className="field w-full cursor-pointer"
           {...register('tipo', { required: true })}
         >
           <option value={TIPO_DESCUENTO.PORCENTAJE}>Porcentaje (%)</option>

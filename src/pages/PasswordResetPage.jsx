@@ -54,75 +54,73 @@ export default function PasswordResetPage() {
     }
   }
 
+  const btnCls = 'w-full h-[52px] bg-primary text-white rounded-xl text-base font-extrabold hover:bg-primary-dark disabled:opacity-45 transition-[background-color,transform] duration-150 active:scale-[0.98]'
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-xl shadow-md w-96 space-y-4">
-        <h1 className="text-xl font-bold">Recuperar contraseña</h1>
+    <div className="min-h-screen flex items-center justify-center bg-ground px-4">
+      <div className="panel p-8 w-full max-w-md space-y-5">
+        <h1 className="font-display text-[40px] font-black uppercase leading-none tracking-wide">Recuperar contraseña</h1>
 
         {paso === 'email' ? (
           <form onSubmit={handleSolicitarCodigo} className="space-y-4">
-            <p className="text-sm text-gray-600">Ingresa tu email para recibir un código de recuperación.</p>
+            <p className="text-[15px] text-gray-600 leading-relaxed">Ingresa tu email para recibir un código de recuperación.</p>
             <input
               type="email"
               placeholder="tu@email.com"
+              aria-label="Email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              className="field w-full h-12"
               required
             />
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary-dark disabled:opacity-50 transition-colors"
-            >
+            <button type="submit" disabled={loading} className={btnCls}>
               {loading ? 'Enviando...' : 'Enviar código'}
             </button>
           </form>
         ) : (
           <form onSubmit={handleConfirmar} className="space-y-4">
-            <p className="text-sm text-gray-600">Ingresa el código recibido y tu nueva contraseña.</p>
+            <p className="text-[15px] text-gray-600 leading-relaxed">Ingresa el código recibido y tu nueva contraseña.</p>
             <input
               type="text"
               placeholder="Código (6 dígitos)"
+              aria-label="Código"
               value={codigo}
               onChange={e => setCodigo(e.target.value)}
               maxLength={6}
-              className="w-full border border-gray-300 rounded-lg p-3 text-center text-2xl tracking-widest focus:outline-none focus:ring-2 focus:ring-primary"
+              className="field w-full h-16 text-center font-display text-[36px] font-extrabold tracking-[0.3em] tabular-nums"
               required
             />
             <div>
               <input
                 type="password"
                 placeholder="Nueva contraseña"
+                aria-label="Nueva contraseña"
                 value={nuevaPassword}
                 onChange={e => { setNuevaPassword(e.target.value); setErrorPassword('') }}
-                className={`w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary ${errorPassword ? 'border-red-400' : 'border-gray-300'}`}
+                className={`field w-full h-12 ${errorPassword ? 'field-error' : ''}`}
                 required
               />
               {errorPassword && (
-                <p className="text-xs text-red-500 mt-1">{errorPassword}</p>
+                <p className="text-[13px] font-bold text-err mt-1.5">{errorPassword}</p>
               )}
-              <p className="text-xs text-gray-400 mt-1">Mínimo 8 caracteres, no puede ser completamente numérica ni una contraseña común.</p>
+              <p className="text-[12.5px] text-gray-500 mt-1.5">Mínimo 8 caracteres, no puede ser completamente numérica ni una contraseña común.</p>
             </div>
             <input
               type="password"
               placeholder="Confirmar contraseña"
+              aria-label="Confirmar contraseña"
               value={confirmar}
               onChange={e => setConfirmar(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              className="field w-full h-12"
               required
             />
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary-dark disabled:opacity-50 transition-colors"
-            >
+            <button type="submit" disabled={loading} className={btnCls}>
               {loading ? 'Actualizando...' : 'Cambiar contraseña'}
             </button>
           </form>
         )}
 
-        <a href="/login" className="block text-sm text-gray-500 text-center hover:text-gray-700">
+        <a href="/login" className="block text-sm font-bold text-gray-500 text-center hover:text-gray-900">
           ← Volver al login
         </a>
       </div>

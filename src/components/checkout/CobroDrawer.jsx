@@ -93,27 +93,29 @@ export default function CobroDrawer({ open, onClose, onPagoExitoso }) {
   const mostrarVolver = !enSeleccion && !enExito && !creando
 
   return (
-    <div className={`h-full overflow-hidden transition-all duration-300 ease-out ${open ? 'w-[460px]' : 'w-0'}`}>
-      <div className={`w-[460px] h-full bg-white border-l border-gray-200 shadow-xl flex flex-col transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}>
+    <div className={`h-full overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${open ? 'w-[480px]' : 'w-0'}`}>
+      <div className={`ml-5 w-[460px] h-full bg-white rounded-2xl border border-gray-200 shadow-float flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${open ? 'translate-x-0' : 'translate-x-full'}`}>
 
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-shrink-0">
+        <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center gap-2 min-w-0">
             {mostrarVolver && (
               <button
                 onClick={() => setPaso(PASO.SELECCION)}
-                className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors flex-shrink-0"
+                className="flex items-center justify-center w-10 h-10 rounded-[10px] bg-sunk text-gray-500 hover:bg-gray-200 hover:text-gray-900 transition-colors flex-shrink-0"
                 title="Cambiar método de pago"
+                aria-label="Cambiar método de pago"
               >
-                <ChevronLeft size={18} />
+                <ChevronLeft size={20} />
               </button>
             )}
-            <h2 className="text-lg font-bold text-gray-900 truncate">{titulo}</h2>
+            <h2 className="modal-title truncate">{titulo}</h2>
           </div>
           {!enExito && (
             <button
               onClick={handleClose}
-              className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors flex-shrink-0"
+              className="flex items-center justify-center w-10 h-10 rounded-[10px] bg-sunk text-gray-500 hover:bg-gray-200 hover:text-gray-900 transition-colors flex-shrink-0"
               title="Cancelar cobro"
+              aria-label="Cancelar cobro"
             >
               <X size={20} />
             </button>
@@ -136,13 +138,15 @@ export default function CobroDrawer({ open, onClose, onPagoExitoso }) {
             />
 
           ) : enSeleccion ? (
-            <div className="animate-in fade-in slide-in-from-right-2 duration-300">
-              <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-5 mb-6 text-white shadow-lg shadow-gray-200">
-                <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">Total a cobrar</p>
-                <p className="text-3xl font-extrabold mt-1 tracking-tight">{formatSoles(boleta.total)}</p>
-                <p className="text-xs text-gray-500 mt-1 font-mono">{boleta.numero}</p>
+            <div className="animate-rise-in">
+              <div className="tag-price flex flex-col justify-center mb-6 pr-5 py-3.5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="text-sm font-extrabold">Total a cobrar</p>
+                  <p className="text-[13px] font-bold tabular-nums">{boleta.numero}</p>
+                </div>
+                <p className="font-display text-[68px] font-black leading-none mt-1 tabular-nums">{formatSoles(boleta.total)}</p>
               </div>
-              <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">¿Cómo deseas pagar?</h3>
+              <h3 className="text-[15px] font-extrabold text-gray-900 mb-3">¿Cómo deseas pagar?</h3>
               <MetodoGrid
                 total={boleta.total}
                 onSeleccionar={(id) => { setMetodoUsado(id); setPaso(id) }}
@@ -150,7 +154,7 @@ export default function CobroDrawer({ open, onClose, onPagoExitoso }) {
             </div>
 
           ) : metodoActivo ? (
-            <div className="animate-in fade-in slide-in-from-right-2 duration-300">
+            <div className="animate-rise-in">
               <metodoActivo.componente boleta={boleta} onExito={handleExito} />
             </div>
 

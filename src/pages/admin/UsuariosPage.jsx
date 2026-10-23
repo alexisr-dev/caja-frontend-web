@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Plus, Pencil, ChevronDown, Users, UserCheck, Shield, Store, UserX } from 'lucide-react'
+import { Plus, Pencil, ChevronDown, UserX } from 'lucide-react'
 import { usuariosApi } from '../../api/usuarios'
 import { useRecursoCrud } from '../../hooks/useRecursoCrud'
 import SlideOver from '../../components/common/SlideOver'
@@ -17,9 +17,9 @@ import { ROLES } from '../../utils/constants'
 const LISTA_ROLES = Object.values(ROLES)
 
 const ROL_COLOR = {
-  [ROLES.ADMIN]: 'bg-purple-100 text-purple-700',
-  [ROLES.VENDEDOR]: 'bg-blue-100 text-blue-700',
-  [ROLES.CLIENTE]: 'bg-gray-100 text-gray-600',
+  [ROLES.ADMIN]: 'bg-[#E1ECF5] text-navy',
+  [ROLES.VENDEDOR]: 'bg-warn-bg text-warn',
+  [ROLES.CLIENTE]: 'bg-sunk text-gray-600',
 }
 
 const OPCIONES_ROL = [
@@ -149,26 +149,26 @@ export default function UsuariosPage() {
   }, [usuarios, busqueda, filtroRol, filtroEstado])
 
   const botonNuevo = (
-    <Button variant="primary" onClick={abrirCrear}>
-      <Plus size={16} className="mr-1.5" /> Nuevo usuario
+    <Button variant="primary" size="lg" onClick={abrirCrear}>
+      <Plus size={18} className="mr-1.5" /> Nuevo usuario
     </Button>
   )
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto">
-      <div className="flex items-start justify-between mb-6 gap-4">
+    <div className="p-8 max-w-[1400px] mx-auto">
+      <div className="flex items-end justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Usuarios</h1>
-          <p className="text-sm text-gray-500 mt-1">Administra cuentas, roles y accesos</p>
+          <h1 className="page-title">Usuarios</h1>
+          <p className="text-[15px] text-gray-500 mt-2">Administra cuentas, roles y accesos</p>
         </div>
         {botonNuevo}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total usuarios" value={kpis.total} icon={Users} />
-        <StatCard label="Activos" value={kpis.activos} icon={UserCheck} tone="success" />
-        <StatCard label="Administradores" value={kpis.admins} icon={Shield} />
-        <StatCard label="Vendedores" value={kpis.vendedores} icon={Store} />
+      <div className="panel grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-200 overflow-hidden mb-6">
+        <StatCard label="Total usuarios" value={kpis.total} />
+        <StatCard label="Activos" value={kpis.activos} tone="success" />
+        <StatCard label="Administradores" value={kpis.admins} />
+        <StatCard label="Vendedores" value={kpis.vendedores} />
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -198,25 +198,25 @@ export default function UsuariosPage() {
           accion={botonNuevo}
         />
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="panel overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+            <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 {COLUMNAS.map(c => (
-                  <th key={c.label} className={`px-4 py-3 font-semibold ${c.align}`}>{c.label}</th>
+                  <th key={c.label} className={`th-cell ${c.align}`}>{c.label}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-200">
               {usuariosFiltrados.map(usuario => (
-                <tr key={usuario.id} className="hover:bg-gray-50/70 transition-colors">
+                <tr key={usuario.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 ${ROL_COLOR[usuario.rol] ?? 'bg-gray-100 text-gray-600'}`}>
+                      <div className={`w-11 h-11 rounded-full flex items-center justify-center text-[13px] font-extrabold shrink-0 ${ROL_COLOR[usuario.rol] ?? 'bg-sunk text-gray-600'}`}>
                         {iniciales(usuario)}
                       </div>
                       <div className="min-w-0">
-                        <p className="font-medium text-gray-900 truncate">
+                        <p className="text-[15px] font-extrabold text-gray-900 truncate">
                           {usuario.first_name} {usuario.last_name}
                         </p>
                         <p className="text-xs text-gray-500 truncate">{usuario.email}</p>
@@ -224,23 +224,23 @@ export default function UsuariosPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ROL_COLOR[usuario.rol]}`}>
+                    <span className={`inline-flex items-center h-6 px-2.5 rounded-full text-xs font-extrabold ${ROL_COLOR[usuario.rol]}`}>
                       {usuario.rol}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${
-                      usuario.is_active ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                    <span className={`inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full text-xs font-extrabold ${
+                      usuario.is_active ? 'bg-ok-bg text-ok' : 'bg-err-bg text-err'
                     }`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${usuario.is_active ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-current" />
                       {usuario.is_active ? 'Activo' : 'Inactivo'}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">
+                  <td className="px-4 py-3 text-gray-500 text-[13px] tabular-nums">
                     {formatFecha(usuario.fecha_registro)}
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <IconButton icon={Pencil} title="Editar" onClick={() => abrirEditar(usuario)} size={15} />
+                    <IconButton icon={Pencil} title="Editar" onClick={() => abrirEditar(usuario)} size={16} />
                   </td>
                 </tr>
               ))}
@@ -304,27 +304,27 @@ export default function UsuariosPage() {
 
           <Select label="Rol" value={formEditar.rol} onChange={setE('rol')} options={OPCIONES_ROL_FORM} />
 
-          <label className="flex items-center gap-2 text-sm">
+          <label className="flex items-center gap-2.5 text-sm font-bold cursor-pointer">
             <input
               type="checkbox"
               checked={formEditar.is_active}
               onChange={e => setFormEditar(f => ({ ...f, is_active: e.target.checked }))}
-              className="rounded"
+              className="w-[18px] h-[18px] rounded accent-[#0A4A78]"
             />
             Usuario activo
           </label>
 
-          <div className="border border-gray-200 rounded-lg overflow-hidden">
+          <div className="border border-gray-200 rounded-xl overflow-hidden">
             <button
               type="button"
               onClick={() => setMostrarCambioPassword(v => !v)}
-              className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-gray-800 hover:bg-gray-50 transition-colors"
             >
               Cambiar contraseña
-              <ChevronDown size={16} className={`transition-transform ${mostrarCambioPassword ? 'rotate-180' : ''}`} />
+              <ChevronDown size={16} className={`transition-transform duration-150 ${mostrarCambioPassword ? 'rotate-180' : ''}`} />
             </button>
             {mostrarCambioPassword && (
-              <div className="px-4 pb-4 pt-3 space-y-3 border-t border-gray-100">
+              <div className="px-4 pb-4 pt-3 space-y-3 border-t border-gray-200">
                 <Input
                   label="Nueva contraseña"
                   type="password"

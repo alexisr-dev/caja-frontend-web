@@ -12,7 +12,7 @@ export default function AbrirTurnoPage() {
   }, [turno, loading, navigate])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-ground">
       <AbrirTurnoModal open={true} onClose={() => navigate('/login')} />
     </div>
   )

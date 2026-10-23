@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Plus, Pencil, Camera, GitBranch, TrendingUp, Trash2, RotateCcw, ImageOff, PackageSearch, Package, AlertTriangle, XCircle, Wallet } from 'lucide-react'
+import { Plus, Pencil, Camera, GitBranch, TrendingUp, Trash2, RotateCcw, ImageOff, PackageSearch } from 'lucide-react'
 import { getProductos, getProducto, crearProducto, actualizarProducto, eliminarProducto } from '../../api/productos'
 import { getCategorias } from '../../api/categorias'
 import { mensajeError } from '../../api/errores'
@@ -21,7 +21,7 @@ import { formatSoles } from '../../utils/formatters'
 import { toast } from 'react-toastify'
 
 const EtiquetaEliminado = () => (
-  <span className="ml-2 align-middle px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10px] font-semibold uppercase tracking-wide">
+  <span className="ml-2 align-middle px-2 py-0.5 rounded-full bg-err-bg text-err text-[10px] font-extrabold uppercase tracking-wide">
     Eliminado
   </span>
 )
@@ -145,22 +145,22 @@ export default function ProductosPage() {
   const editando = modal === 'editar'
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto">
-      <div className="flex items-start justify-between mb-6 gap-4">
+    <div className="p-8 max-w-[1400px] mx-auto">
+      <div className="flex items-end justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Productos</h1>
-          <p className="text-sm text-gray-500 mt-1">Gestiona tu catálogo e inventario</p>
+          <h1 className="page-title">Productos</h1>
+          <p className="text-[15px] text-gray-500 mt-2">Gestiona tu catálogo e inventario</p>
         </div>
-        <Button variant="primary" onClick={() => abrir('crear')}>
-          <Plus size={16} className="mr-1.5" /> Nuevo producto
+        <Button variant="primary" size="lg" onClick={() => abrir('crear')}>
+          <Plus size={18} className="mr-1.5" /> Nuevo producto
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total productos" value={kpis.total} icon={Package} tone="default" />
-        <StatCard label="Stock bajo" value={kpis.bajos} icon={AlertTriangle} tone="warning" hint="Igual o bajo el mínimo" />
-        <StatCard label="Agotados" value={kpis.agotados} icon={XCircle} tone="danger" />
-        <StatCard label="Valor inventario" value={formatSoles(kpis.valor)} icon={Wallet} tone="success" />
+      <div className="panel grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-200 overflow-hidden mb-6">
+        <StatCard label="Total productos" value={kpis.total} tone="default" />
+        <StatCard label="Stock bajo" value={kpis.bajos} tone="warning" hint="Igual o bajo el mínimo" />
+        <StatCard label="Agotados" value={kpis.agotados} tone="danger" />
+        <StatCard label="Valor inventario" value={formatSoles(kpis.valor)} tone="success" />
       </div>
 
       <div className="mb-4">
@@ -199,47 +199,47 @@ export default function ProductosPage() {
           )}
         />
       ) : vista === 'tabla' ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="panel overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+            <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-4 py-3 text-left font-semibold">Producto</th>
-                <th className="px-4 py-3 text-left font-semibold">Categoría</th>
-                <th className="px-4 py-3 text-right font-semibold">Precio</th>
-                <th className="px-4 py-3 text-center font-semibold">Stock</th>
-                <th className="px-4 py-3 text-center font-semibold">Acciones</th>
+                <th className="th-cell text-left">Producto</th>
+                <th className="th-cell text-left">Categoría</th>
+                <th className="th-cell text-right">Precio</th>
+                <th className="th-cell text-center">Stock</th>
+                <th className="th-cell text-center">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-200">
               {productosVisibles.map(p => (
-                <tr key={p.sku} className={`hover:bg-gray-50/70 transition-colors ${p.activo === false ? 'opacity-60' : ''}`}>
+                <tr key={p.sku} className={`hover:bg-gray-50 transition-colors ${p.activo === false ? 'opacity-60' : ''}`}>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       {p.imagen_principal || p.primera_foto ? (
                         <img
                           src={p.imagen_principal ?? p.primera_foto}
                           alt={p.nombre}
-                          className="w-11 h-11 object-cover rounded-lg border border-gray-200 shrink-0"
+                          className="w-12 h-12 object-cover rounded-xl bg-sunk shrink-0"
                         />
                       ) : (
-                        <div className="w-11 h-11 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center shrink-0">
-                          <ImageOff size={16} className="text-gray-300" />
+                        <div className="w-12 h-12 rounded-xl bg-sunk flex items-center justify-center shrink-0">
+                          <ImageOff size={16} className="text-gray-400" />
                         </div>
                       )}
                       <div className="min-w-0">
-                        <p className="font-medium text-gray-900 truncate">
+                        <p className="text-[15px] font-extrabold text-gray-900 truncate">
                           {p.nombre}
                           {p.activo === false && <EtiquetaEliminado />}
                         </p>
-                        <p className="font-mono text-xs text-gray-400">{p.sku}</p>
+                        <p className="text-xs text-gray-500 tabular-nums tracking-wide">{p.sku}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-gray-500">{p.categoria_nombre ?? '—'}</td>
-                  <td className="px-4 py-3 text-right font-semibold text-gray-900">{formatSoles(p.precio)}</td>
+                  <td className="px-4 py-3 text-right font-display text-[28px] font-extrabold leading-none text-gray-900 tabular-nums">{formatSoles(p.precio)}</td>
                   <td className="px-4 py-3 text-center"><StockBadge producto={p} /></td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center justify-center gap-1">
+                    <div className="flex items-center justify-center gap-0.5">
                       <IconButton icon={Pencil} title="Editar" onClick={() => abrir('editar', p)} />
                       <IconButton icon={Camera} title="Fotos" onClick={() => abrir('fotos', p)} />
                       <IconButton icon={GitBranch} title="Nueva variante" onClick={() => abrir('variante', p)} />

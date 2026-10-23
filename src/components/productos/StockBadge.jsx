@@ -9,9 +9,9 @@ export const stockStatus = (producto) => {
 }
 
 const config = {
-  ok: { icon: CheckCircle2, cls: 'bg-emerald-50 text-emerald-700' },
-  bajo: { icon: AlertTriangle, cls: 'bg-amber-50 text-amber-700' },
-  agotado: { icon: XCircle, cls: 'bg-rose-50 text-rose-700' },
+  ok: { icon: CheckCircle2, cls: 'bg-ok-bg text-ok' },
+  bajo: { icon: AlertTriangle, cls: 'bg-warn-bg text-warn' },
+  agotado: { icon: XCircle, cls: 'bg-err-bg text-err' },
 }
 
 export default function StockBadge({ producto }) {
@@ -21,10 +21,10 @@ export default function StockBadge({ producto }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold ${cls}`}
+      className={`tag-chip inline-flex items-center gap-1.5 h-7 pr-3 text-[13px] font-extrabold tabular-nums ${cls}`}
       title={minimo > 0 ? `Mínimo: ${minimo}` : undefined}
     >
-      <Icon size={13} />
+      <Icon size={14} />
       {producto.stock ?? 0}
     </span>
   )

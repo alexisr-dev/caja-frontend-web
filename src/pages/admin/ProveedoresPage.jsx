@@ -53,11 +53,11 @@ export default function ProveedoresPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Proveedores</h1>
-        <Button variant="primary" onClick={abrirCrear}>
-          <Plus size={16} className="mr-1" /> Nuevo proveedor
+    <div className="p-8">
+      <div className="flex items-end justify-between mb-6">
+        <h1 className="page-title">Proveedores</h1>
+        <Button variant="primary" size="lg" onClick={abrirCrear}>
+          <Plus size={18} className="mr-1.5" /> Nuevo proveedor
         </Button>
       </div>
 
@@ -68,30 +68,30 @@ export default function ProveedoresPage() {
           descripcion="Registra tu primer proveedor para asociarlo a los productos."
           accion={(
             <Button variant="primary" onClick={abrirCrear}>
-              <Plus size={16} className="mr-1" /> Nuevo proveedor
+              <Plus size={16} className="mr-1.5" /> Nuevo proveedor
             </Button>
           )}
         />
       ) : (
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="panel overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-600 text-xs uppercase">
+            <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                {COLUMNAS.map(c => <th key={c} className="px-4 py-3 text-left">{c}</th>)}
-                <th className="px-4 py-3 text-center">Acciones</th>
+                {COLUMNAS.map(c => <th key={c} className="th-cell text-left">{c}</th>)}
+                <th className="th-cell text-center">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-200">
               {proveedores.map(proveedor => (
-                <tr key={proveedor.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-mono text-xs">{proveedor.ruc}</td>
-                  <td className="px-4 py-3 font-medium">{proveedor.razon_social}</td>
-                  <td className="px-4 py-3 text-gray-500">{proveedor.telefono || '-'}</td>
-                  <td className="px-4 py-3 text-gray-500">{proveedor.persona_contacto || '-'}</td>
-                  <td className="px-4 py-3">
+                <tr key={proveedor.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-4 py-3.5 text-[13.5px] font-bold tabular-nums tracking-wide">{proveedor.ruc}</td>
+                  <td className="px-4 py-3.5 text-[15px] font-extrabold">{proveedor.razon_social}</td>
+                  <td className="px-4 py-3.5 text-gray-500 tabular-nums">{proveedor.telefono || '-'}</td>
+                  <td className="px-4 py-3.5 text-gray-500">{proveedor.persona_contacto || '-'}</td>
+                  <td className="px-4 py-3.5">
                     <div className="flex items-center justify-center gap-1">
-                      <IconButton icon={Pencil} title="Editar" onClick={() => abrirEditar(proveedor)} size={15} />
-                      <IconButton icon={Trash2} title="Eliminar" danger onClick={() => eliminar(proveedor.id)} size={15} />
+                      <IconButton icon={Pencil} title="Editar" onClick={() => abrirEditar(proveedor)} size={16} />
+                      <IconButton icon={Trash2} title="Eliminar" danger onClick={() => eliminar(proveedor.id)} size={16} />
                     </div>
                   </td>
                 </tr>

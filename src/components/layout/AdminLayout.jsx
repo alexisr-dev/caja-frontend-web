@@ -36,38 +36,39 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <aside className="w-64 bg-white shadow-lg flex flex-col">
-        <div className="px-6 py-5 border-b">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-primary">Caja Smart</h1>
+    <div className="flex h-screen bg-ground">
+      <aside className="w-[248px] shrink-0 bg-navy text-white flex flex-col">
+        <div className="px-6 pt-6 pb-4">
+          <div className="flex items-center gap-2.5">
+            <img src="/logo.svg" alt="" className="w-9 h-9 shrink-0" />
+            <h1 className="font-display text-[30px] font-black uppercase leading-none tracking-wide">Caja Smart</h1>
             {user?.es_demo && (
-              <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium">
+              <span className="text-[11px] bg-gold text-gray-900 px-2 py-0.5 rounded-full font-extrabold">
                 DEMO
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-500 mt-1">{user?.email}</p>
+          <p className="text-[13px] text-white/65 mt-3 truncate">{user?.email}</p>
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-4 px-3">
+        <nav className="flex-1 overflow-y-auto py-2 px-3 flex flex-col gap-0.5">
           {NAV.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
               to={to}
               end={end}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-sm transition-colors ${
+                `flex items-center gap-3 h-10 px-3 rounded-[10px] text-sm font-bold transition-colors ${
                   isActive
-                    ? 'bg-primary text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-gold text-gray-900 tag-nav pl-[22px]'
+                    : 'text-white/85 hover:bg-white/10'
                 }`
               }
             >
               <Icon size={18} />
               <span className="flex-1">{label}</span>
               {to === '/admin/alertas' && alertasNoLeidas > 0 && (
-                <span className="bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full leading-none">
+                <span className="bg-err text-white text-xs font-extrabold min-w-[22px] h-[22px] px-1.5 rounded-full inline-flex items-center justify-center leading-none">
                   {alertasNoLeidas}
                 </span>
               )}
@@ -75,10 +76,10 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        <div className="p-4 border-t">
+        <div className="p-3 border-t border-white/10">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 text-sm text-gray-500 hover:text-red-500 transition-colors w-full px-3 py-2 rounded-lg hover:bg-red-50"
+            className="flex items-center gap-3 h-10 text-sm font-bold text-white/75 hover:text-white transition-colors w-full px-3 rounded-[10px] hover:bg-white/10"
           >
             <LogOut size={18} />
             Cerrar sesión

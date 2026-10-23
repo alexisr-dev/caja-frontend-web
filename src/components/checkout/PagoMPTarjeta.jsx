@@ -44,9 +44,9 @@ const maskNumero = (numero) => {
   return d.replace(/(.{4})/g, '$1 ').trim()
 }
 
-const boxCls = 'flex items-center gap-2.5 px-3.5 h-[52px] rounded-xl border-2 border-gray-200 bg-white transition focus-within:border-[#009EE3] focus-within:ring-4 focus-within:ring-[#009EE3]/10'
-const inputCls = 'flex-1 min-w-0 bg-transparent outline-none text-sm text-gray-800 placeholder-gray-400'
-const labelCls = 'text-sm font-semibold text-gray-700 mb-1.5 block'
+const boxCls = 'flex items-center gap-2.5 px-3.5 h-12 rounded-xl border-[1.5px] border-gray-300 bg-white transition-[border-color,box-shadow] duration-150 focus-within:border-[#0A6BB0] focus-within:ring-4 focus-within:ring-[#0A6BB0]/15'
+const inputCls = 'flex-1 min-w-0 bg-transparent outline-none text-[15px] text-gray-900 placeholder-gray-400'
+const labelCls = 'field-label mb-1.5 block'
 
 function BrandMark({ method }) {
   if (method === 'visa') return <span className="text-[#1A1F71] font-extrabold italic text-base tracking-tight shrink-0">VISA</span>
@@ -84,12 +84,12 @@ function TarjetaPreview({ numero, nombre, expiry, cvv, brand, flip }) {
   }
 
   const tema = brand === 'visa'
-    ? 'from-[#1A1F71] to-[#2D6CDF]'
+    ? 'bg-[#1A1F71]'
     : brand === 'master'
-      ? 'from-gray-800 to-gray-950'
+      ? 'bg-gray-800'
       : brand === 'amex'
-        ? 'from-[#2E77BC] to-[#155a99]'
-        : 'from-indigo-500 via-purple-500 to-fuchsia-500'
+        ? 'bg-[#2E77BC]'
+        : 'bg-navy'
 
   const transform = flip
     ? 'rotateY(180deg)'
@@ -101,10 +101,9 @@ function TarjetaPreview({ numero, nombre, expiry, cvv, brand, flip }) {
         className="relative w-full aspect-[1.6/1] [transform-style:preserve-3d] transition-transform duration-500 will-change-transform"
         style={{ transform }}
       >
-        <div className={`absolute inset-0 [backface-visibility:hidden] rounded-2xl bg-gradient-to-br ${tema} text-white p-5 shadow-xl shadow-gray-900/30 overflow-hidden`}>
-          <div className="absolute -inset-x-10 -top-20 h-40 bg-white/10 rotate-12 blur-2xl pointer-events-none" />
+        <div className={`absolute inset-0 [backface-visibility:hidden] rounded-2xl ${tema} text-white p-5 shadow-pop overflow-hidden`}>
           <div className="relative flex items-start justify-between">
-            <div className="w-11 h-8 rounded-md bg-gradient-to-br from-yellow-200 to-yellow-400 shadow-inner" />
+            <div className="w-11 h-8 rounded-md bg-gold" />
             <div className="h-7 flex items-center"><BrandMarkWhite method={brand} /></div>
           </div>
           <p className="relative mt-5 text-xl font-mono tracking-[0.18em] text-white/95">{maskNumero(numero)}</p>
@@ -120,7 +119,7 @@ function TarjetaPreview({ numero, nombre, expiry, cvv, brand, flip }) {
           </div>
         </div>
 
-        <div className={`absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl bg-gradient-to-br ${tema} text-white shadow-xl shadow-gray-900/30 overflow-hidden`}>
+        <div className={`absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl ${tema} text-white shadow-pop overflow-hidden`}>
           <div className="w-full h-9 bg-black/80 mt-5" />
           <div className="px-5 mt-4">
             <p className="text-[9px] uppercase tracking-widest text-white/50 mb-1 text-right">CVV</p>
@@ -236,16 +235,16 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
     <div className="space-y-5">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[#009EE3]/10 text-[#009EE3] flex items-center justify-center shrink-0">
-            <CreditCard size={18} />
+          <div className="w-10 h-10 rounded-xl bg-[#0A6BB0] text-white flex items-center justify-center shrink-0">
+            <CreditCard size={20} />
           </div>
           <div>
-            <h3 className="font-bold text-gray-900 leading-tight">Datos de la tarjeta</h3>
-            <p className="text-xs text-gray-400">Pago al contado · vía Mercado Pago</p>
+            <h3 className="font-extrabold text-gray-900 leading-tight">Datos de la tarjeta</h3>
+            <p className="text-xs text-gray-500">Pago al contado · vía Mercado Pago</p>
           </div>
         </div>
         <div className="text-right shrink-0">
-          <p className="flex items-center gap-1 text-xs font-semibold text-green-600 justify-end">
+          <p className="flex items-center gap-1 text-xs font-extrabold text-ok justify-end">
             <ShieldCheck size={13} /> Pago seguro
           </p>
           <p className="text-[10px] text-gray-400">Encriptación SSL</p>
@@ -262,11 +261,11 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
       />
 
       {IS_SANDBOX && (
-        <details className="text-xs bg-amber-50/70 border border-amber-200 rounded-xl px-3 py-2.5">
-          <summary className="font-semibold text-amber-800 cursor-pointer select-none">
+        <details className="text-xs bg-warn-bg rounded-xl px-3.5 py-3">
+          <summary className="font-extrabold text-warn cursor-pointer select-none">
             Modo TEST — tarjetas de prueba
           </summary>
-          <div className="mt-2 space-y-1 text-amber-900/90">
+          <div className="mt-2 space-y-1 text-warn">
             <p><b>Mastercard</b> · 5031 7557 3453 0604 · CVV 123 · 11/30</p>
             <p><b>Visa</b> · 4235 6477 2802 5682 · CVV 123 · 11/30</p>
             <p className="pt-1"><b>Titular:</b> <code>APRO</code> aprobado · <code>FUND</code> sin fondos · <code>OTHE</code> rechazo</p>
@@ -380,24 +379,24 @@ export default function PagoMPTarjeta({ boleta, onExito }) {
         </div>
       </div>
 
-      <div className="rounded-2xl bg-gray-50 border border-gray-100 p-4 flex items-center gap-3">
-        <div className="w-11 h-11 rounded-xl bg-[#009EE3]/10 text-[#009EE3] flex items-center justify-center shrink-0">
+      <div className="rounded-2xl bg-sunk p-4 flex items-center gap-3">
+        <div className="w-11 h-11 rounded-xl bg-white text-[#0A6BB0] flex items-center justify-center shrink-0">
           <ShoppingCart size={20} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-gray-500">Estás por pagar</p>
-          <p className="text-xl font-extrabold text-gray-900 tabular-nums leading-tight">{formatSoles(boleta.total)}</p>
+          <p className="text-xs font-bold text-gray-500">Estás por pagar</p>
+          <p className="font-display text-[34px] font-black text-gray-900 tabular-nums leading-none">{formatSoles(boleta.total)}</p>
         </div>
         <div className="space-y-1 shrink-0">
-          <p className="flex items-center gap-1 text-[11px] text-green-600"><CheckCircle2 size={12} /> Datos protegidos</p>
-          <p className="flex items-center gap-1 text-[11px] text-green-600"><CheckCircle2 size={12} /> Pago cifrado</p>
+          <p className="flex items-center gap-1 text-[11px] font-bold text-ok"><CheckCircle2 size={12} /> Datos protegidos</p>
+          <p className="flex items-center gap-1 text-[11px] font-bold text-ok"><CheckCircle2 size={12} /> Pago cifrado</p>
         </div>
       </div>
 
       <button
         onClick={cobrar}
         disabled={loading || !puedePagar}
-        className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-[#009EE3] text-white font-bold hover:bg-[#0089C7] transition-colors shadow-sm shadow-[#009EE3]/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#009EE3]"
+        className="w-full flex items-center justify-center gap-2 h-[58px] rounded-2xl bg-[#0A6BB0] text-white text-[17px] font-extrabold hover:bg-[#085A94] transition-[background-color,transform] duration-150 active:scale-[0.98] disabled:opacity-45 disabled:cursor-not-allowed disabled:hover:bg-[#0A6BB0] disabled:active:scale-100"
       >
         <Lock size={16} />
         {loading ? 'Procesando…' : puedePagar ? `Pagar ${formatSoles(boleta.total)}` : 'Completa la tarjeta'}

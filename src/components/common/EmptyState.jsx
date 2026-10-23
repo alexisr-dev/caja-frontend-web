@@ -1,13 +1,13 @@
 export default function EmptyState({ icon: Icon, titulo, descripcion, accion }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 py-16 flex flex-col items-center text-center">
+    <div className="panel py-16 flex flex-col items-center text-center">
       {Icon && (
-        <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-          <Icon size={26} className="text-gray-400" />
+        <div className="tag-price tag-price-muted w-[132px] h-16 flex items-center justify-center mb-5 pl-5">
+          <Icon size={28} className="text-gray-400" />
         </div>
       )}
-      <p className="font-medium text-gray-700">{titulo}</p>
-      {descripcion && <p className="text-sm text-gray-400 mt-1 mb-5">{descripcion}</p>}
+      <p className="text-[17px] font-extrabold text-gray-900">{titulo}</p>
+      {descripcion && <p className="text-sm text-gray-500 mt-1 mb-5">{descripcion}</p>}
       {accion}
     </div>
   )

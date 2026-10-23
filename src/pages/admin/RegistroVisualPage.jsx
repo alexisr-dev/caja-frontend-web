@@ -77,18 +77,18 @@ export default function RegistroVisualPage() {
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-2">Registro visual IA</h1>
-      <p className="text-gray-500 text-sm mb-6">
+    <div className="p-8">
+      <h1 className="page-title mb-3">Registro visual IA</h1>
+      <p className="text-gray-500 text-[15px] mb-6">
         Sube fotos de productos para entrenar el catálogo de reconocimiento por imagen (YOLO + CLIP).
       </p>
 
-      <div className="flex gap-6 items-start">
+      <div className="flex flex-col xl:flex-row gap-6 items-start">
 
-        <div className="w-full max-w-md bg-white rounded-xl shadow-sm p-6 space-y-5">
+        <div className="w-full max-w-md panel p-6 space-y-5">
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Producto</label>
+          <div className="flex flex-col gap-1.5">
+            <label className="field-label">Producto</label>
             <div className="relative">
               <input
                 type="text"
@@ -103,18 +103,18 @@ export default function RegistroVisualPage() {
                 onFocus={() => setMostrarOpciones(true)}
                 onBlur={() => setTimeout(() => setMostrarOpciones(false), 150)}
                 placeholder="Buscar por nombre o SKU..."
-                className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary"
+                className="field w-full"
               />
               {mostrarOpciones && busqueda && productosFiltrados.length > 0 && (
-                <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-48 overflow-y-auto">
+                <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-xl shadow-pop mt-1.5 max-h-52 overflow-y-auto p-1.5 animate-pop-in">
                   {productosFiltrados.map(p => (
                     <li
                       key={p.sku}
                       onMouseDown={() => seleccionarProducto(p)}
-                      className="px-3 py-2 text-sm cursor-pointer hover:bg-primary/10"
+                      className="px-3 py-2.5 text-sm rounded-lg cursor-pointer hover:bg-sky-50"
                     >
-                      <span className="font-medium">{p.nombre}</span>
-                      <span className="text-gray-400 ml-2 text-xs">{p.sku}</span>
+                      <span className="font-bold">{p.nombre}</span>
+                      <span className="text-gray-500 ml-2 text-xs tabular-nums">{p.sku}</span>
                     </li>
                   ))}
                 </ul>
@@ -123,41 +123,42 @@ export default function RegistroVisualPage() {
           </div>
 
           {sku && (
-            <div className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3">
+            <div className="flex items-center justify-between bg-sunk rounded-xl px-4 py-3">
               <div className="text-sm text-gray-600">
-                <span className="font-medium">{nombreProducto}</span>
-                <span className="text-gray-400 ml-2 text-xs">{sku}</span>
+                <span className="font-extrabold text-gray-900">{nombreProducto}</span>
+                <span className="text-gray-500 ml-2 text-xs tabular-nums">{sku}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-primary font-semibold">
-                <Hash size={14} />
-                <span className="text-lg">{sufijo}</span>
+              <div className="flex items-center gap-1.5 text-primary">
+                <Hash size={15} />
+                <span className="font-display text-[34px] font-black leading-none tabular-nums">{sufijo}</span>
               </div>
             </div>
           )}
 
           <div
             onClick={() => inputRef.current?.click()}
-            className="border-2 border-dashed border-gray-300 rounded-xl h-48 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors"
+            className="bg-sunk shadow-[inset_0_0_0_2px_#CBC4AE] rounded-2xl h-52 flex flex-col items-center justify-center cursor-pointer hover:shadow-[inset_0_0_0_2px_#0A4A78] transition-shadow"
           >
             {preview ? (
-              <img src={preview} alt="preview" className="h-full w-full object-contain rounded-xl" />
+              <img src={preview} alt="preview" className="h-full w-full object-contain rounded-2xl" />
             ) : (
               <>
-                <Upload size={36} className="text-gray-300 mb-2" />
-                <p className="text-sm text-gray-400">Haz clic para seleccionar foto</p>
+                <Upload size={36} className="text-gray-400 mb-2" />
+                <p className="text-sm text-gray-500 font-semibold">Haz clic para seleccionar foto</p>
               </>
             )}
           </div>
           <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
 
           {idChroma && (
-            <p className="text-xs text-gray-400 text-center">
-              Se registrará como <span className="font-mono font-medium text-gray-600">{idChroma}</span>
+            <p className="text-xs text-gray-500 text-center">
+              Se registrará como <span className="font-extrabold text-gray-800 tabular-nums">{idChroma}</span>
             </p>
           )}
 
           <Button
             variant="primary"
+            size="lg"
             className="w-full"
             onClick={handleSubir}
             disabled={uploading || !sku || !archivo}
@@ -166,36 +167,38 @@ export default function RegistroVisualPage() {
           </Button>
         </div>
 
-        <div className="flex-1 bg-white rounded-xl shadow-sm p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Lightbulb size={18} className="text-yellow-500" />
-            <h2 className="font-semibold text-gray-800">Cómo preparar las fotos</h2>
+        <div className="flex-1 min-w-0 panel p-6">
+          <div className="flex items-center gap-2.5 mb-4">
+            <span className="w-9 h-9 rounded-[10px] bg-gold-soft text-warn flex items-center justify-center">
+              <Lightbulb size={18} />
+            </span>
+            <h2 className="text-lg font-extrabold text-gray-900">Cómo preparar las fotos</h2>
           </div>
-          <p className="text-xs text-gray-500 mb-4">
+          <p className="text-[13px] text-gray-500 mb-4 leading-relaxed">
             YOLO detecta el producto en la imagen y CLIP genera el vector de reconocimiento.
             La calidad de la foto impacta directamente en la precisión del reconocimiento.
           </p>
 
-          <div className="space-y-2 mb-6">
+          <div className="space-y-2.5 mb-6">
             {TIPS.filter(t => t.ok).map((t, i) => (
-              <div key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                <CheckCircle size={15} className="text-green-500 mt-0.5 shrink-0" />
+              <div key={i} className="flex items-start gap-2.5 text-[14.5px] text-gray-800">
+                <CheckCircle size={17} className="text-ok mt-0.5 shrink-0" />
                 {t.texto}
               </div>
             ))}
           </div>
 
-          <div className="border-t border-gray-100 pt-4 space-y-2">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Evitar</p>
+          <div className="border-t border-gray-200 pt-4 space-y-2.5">
+            <p className="text-xs font-extrabold text-gray-500 mb-2">Evitar</p>
             {TIPS.filter(t => !t.ok).map((t, i) => (
-              <div key={i} className="flex items-start gap-2 text-sm text-gray-500">
-                <AlertCircle size={15} className="text-red-400 mt-0.5 shrink-0" />
+              <div key={i} className="flex items-start gap-2.5 text-[14.5px] text-gray-600">
+                <AlertCircle size={17} className="text-err mt-0.5 shrink-0" />
                 {t.texto}
               </div>
             ))}
           </div>
 
-          <div className="mt-5 bg-blue-50 rounded-lg px-4 py-3 text-xs text-blue-700">
+          <div className="mt-5 bg-sky-50 rounded-xl px-4 py-3 text-[13px] text-[#075985] leading-relaxed">
             <strong>Tip:</strong> Registra entre 10 y 15 fotos por producto con diferentes ángulos e iluminaciones.
             CLIP necesita suficientes embeddings variados para lograr un reconocimiento robusto en condiciones reales.
           </div>

@@ -8,11 +8,11 @@ export default function CartList({ bloqueado = false }) {
   if (items.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
-        <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-300">
-          <ShoppingCart size={30} strokeWidth={1.5} />
+        <div className="tag-price tag-price-muted w-[132px] h-16 flex items-center justify-center pl-5">
+          <ShoppingCart size={28} strokeWidth={1.75} />
         </div>
-        <p className="mt-4 text-sm font-medium text-gray-500">Carrito vacío</p>
-        <p className="text-xs text-gray-400 mt-0.5">Escanea un producto para agregarlo</p>
+        <p className="mt-5 text-base font-extrabold text-gray-900">Carrito vacío</p>
+        <p className="text-sm text-gray-500 mt-1">Escanea un producto para agregarlo</p>
       </div>
     )
   }

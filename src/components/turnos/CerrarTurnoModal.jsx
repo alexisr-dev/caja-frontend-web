@@ -51,10 +51,10 @@ export default function CerrarTurnoModal({ open, onClose }) {
             onChange={e => setMontoContado(e.target.value)}
             required
           />
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Observaciones</label>
+          <div className="flex flex-col gap-1.5">
+            <label className="field-label">Observaciones</label>
             <textarea
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none"
+              className="field h-auto py-2.5 resize-none"
               rows={3}
               placeholder="Opcional..."
               value={observaciones}
@@ -70,21 +70,21 @@ export default function CerrarTurnoModal({ open, onClose }) {
         </form>
       ) : (
         <div className="space-y-4">
-          <h3 className="font-semibold text-center">Cuadre de caja</h3>
-          <div className="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
-            <div className="flex justify-between">
+          <h3 className="font-display text-[34px] font-black uppercase leading-none text-center">Cuadre de caja</h3>
+          <div className="bg-sunk rounded-2xl p-4 space-y-2 text-[15px] tabular-nums">
+            <div className="flex justify-between text-gray-600">
               <span>Efectivo esperado</span>
-              <span>{formatSoles(resultado.esperado_en_caja)}</span>
+              <span className="font-bold text-gray-900">{formatSoles(resultado.esperado_en_caja)}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between text-gray-600">
               <span>Efectivo contado</span>
-              <span>{formatSoles(resultado.monto_contado_cierre)}</span>
+              <span className="font-bold text-gray-900">{formatSoles(resultado.monto_contado_cierre)}</span>
             </div>
-            <div className={`flex justify-between font-bold pt-2 border-t ${
-              resultado.diferencia >= 0 ? 'text-green-600' : 'text-red-600'
+            <div className={`flex justify-between items-baseline font-extrabold pt-3 border-t border-gray-300 ${
+              resultado.diferencia >= 0 ? 'text-ok' : 'text-err'
             }`}>
               <span>Diferencia</span>
-              <span>{formatSoles(resultado.diferencia)}</span>
+              <span className="font-display text-[40px] font-black leading-none">{formatSoles(resultado.diferencia)}</span>
             </div>
           </div>
           <p className="text-center text-sm text-gray-600">{resultado.diagnostico}</p>

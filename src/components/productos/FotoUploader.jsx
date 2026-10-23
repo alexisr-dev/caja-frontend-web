@@ -37,25 +37,26 @@ export default function FotoUploader({ sku, fotos = [], onActualizar }) {
 
   return (
     <div className="space-y-3">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-3">
         {fotos.map(foto => (
-          <div key={foto.id} className="relative group w-24 h-24">
-            <img src={foto.imagen} alt="" className="w-full h-full object-cover rounded-lg" />
+          <div key={foto.id} className="relative group w-28 h-28">
+            <img src={foto.imagen} alt="" className="w-full h-full object-cover rounded-2xl bg-sunk" />
             <button
               onClick={() => handleEliminar(foto.id)}
-              className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              aria-label="Eliminar foto"
+              className="absolute -top-2 -right-2 w-7 h-7 bg-err text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
             >
-              <X size={12} />
+              <X size={14} />
             </button>
           </div>
         ))}
         <button
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className="w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:border-primary hover:text-primary transition-colors disabled:opacity-50"
+          className="w-28 h-28 bg-sunk shadow-[inset_0_0_0_2px_#CBC4AE] rounded-2xl flex flex-col items-center justify-center text-primary hover:shadow-[inset_0_0_0_2px_#0A4A78] transition-shadow disabled:opacity-50"
         >
-          <Upload size={20} />
-          <span className="text-xs mt-1">{uploading ? '...' : 'Agregar'}</span>
+          <Upload size={24} />
+          <span className="text-[13px] font-extrabold mt-1">{uploading ? '...' : 'Agregar'}</span>
         </button>
       </div>
       <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />

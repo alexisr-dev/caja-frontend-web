@@ -49,15 +49,15 @@ export default function DescuentosPage() {
   }
 
   const botonNuevo = (
-    <Button variant="primary" onClick={abrirCrear}>
-      <Plus size={16} className="mr-1" /> Nuevo descuento
+    <Button variant="primary" size="lg" onClick={abrirCrear}>
+      <Plus size={18} className="mr-1.5" /> Nuevo descuento
     </Button>
   )
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Descuentos</h1>
+    <div className="p-8">
+      <div className="flex items-end justify-between mb-6">
+        <h1 className="page-title">Descuentos</h1>
         {botonNuevo}
       </div>
 
@@ -69,39 +69,41 @@ export default function DescuentosPage() {
           accion={botonNuevo}
         />
       ) : (
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="panel overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-600 text-xs uppercase">
+            <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                {COLUMNAS.map(c => <th key={c} className="px-4 py-3 text-left">{c}</th>)}
-                <th className="px-4 py-3 text-center">Estado</th>
-                <th className="px-4 py-3 text-center">Acciones</th>
+                {COLUMNAS.map(c => <th key={c} className="th-cell text-left">{c}</th>)}
+                <th className="th-cell text-center">Estado</th>
+                <th className="th-cell text-center">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-200">
               {descuentos.map(descuento => (
-                <tr key={descuento.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium">
+                <tr key={descuento.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-4 py-3.5 text-[15px] font-extrabold">
                     {descuento.producto?.nombre ?? descuento.producto}
                   </td>
-                  <td className="px-4 py-3 text-gray-500">{descuento.tipo}</td>
-                  <td className="px-4 py-3 font-semibold text-green-600">
-                    {formatearValor(descuento)}
+                  <td className="px-4 py-3.5 text-gray-500">{descuento.tipo}</td>
+                  <td className="px-4 py-3.5">
+                    <span className="tag-chip inline-flex items-center h-8 pr-3.5 bg-gold text-gray-900 font-display text-2xl font-black leading-none tabular-nums">
+                      {formatearValor(descuento)}
+                    </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">
+                  <td className="px-4 py-3.5 text-gray-500 text-[13px] tabular-nums">
                     {formatFecha(descuento.fecha_inicio)} — {formatFecha(descuento.fecha_fin)}
                   </td>
-                  <td className="px-4 py-3 text-center">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      descuento.activo ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
+                  <td className="px-4 py-3.5 text-center">
+                    <span className={`inline-flex items-center h-6 px-2.5 rounded-full text-xs font-extrabold ${
+                      descuento.activo ? 'bg-ok-bg text-ok' : 'bg-sunk text-gray-500'
                     }`}>
                       {descuento.activo ? 'Activo' : 'Inactivo'}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3.5">
                     <div className="flex items-center justify-center gap-1">
-                      <IconButton icon={Pencil} title="Editar" onClick={() => abrirEditar(descuento)} size={15} />
-                      <IconButton icon={Trash2} title="Eliminar" danger onClick={() => eliminar(descuento.id)} size={15} />
+                      <IconButton icon={Pencil} title="Editar" onClick={() => abrirEditar(descuento)} size={16} />
+                      <IconButton icon={Trash2} title="Eliminar" danger onClick={() => eliminar(descuento.id)} size={16} />
                     </div>
                   </td>
                 </tr>

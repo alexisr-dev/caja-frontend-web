@@ -10,12 +10,12 @@ export default function VarianteForm({ skuPadre, nombrePadre, onSubmit, loading 
 
   return (
     <form onSubmit={handleSubmit(submit)} className="space-y-4">
-      <div className="bg-gray-50 rounded-lg px-4 py-2.5 flex items-center gap-3">
-        <GitBranch size={15} className="text-gray-400 shrink-0" />
+      <div className="bg-sunk rounded-xl px-4 py-3 flex items-center gap-3">
+        <GitBranch size={16} className="text-gray-500 shrink-0" />
         <div className="text-sm">
           <span className="text-gray-500">Variante de </span>
-          <span className="font-medium text-gray-800">{nombrePadre ?? skuPadre}</span>
-          <span className="font-mono text-xs text-gray-400 ml-2">{skuPadre}</span>
+          <span className="font-extrabold text-gray-900">{nombrePadre ?? skuPadre}</span>
+          <span className="text-xs text-gray-500 ml-2 tabular-nums tracking-wide">{skuPadre}</span>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">

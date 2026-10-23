@@ -7,18 +7,16 @@ const Input = forwardRef(function Input({
   ...props
 }, ref) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1.5">
       {label && (
-        <label className="text-sm font-medium text-gray-700">{label}</label>
+        <label className="field-label">{label}</label>
       )}
       <input
         ref={ref}
-        className={`border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary focus:border-primary transition ${
-          error ? 'border-red-500' : 'border-gray-300'
-        } ${className}`}
+        className={`field w-full ${error ? 'field-error' : ''} ${className}`}
         {...props}
       />
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {error && <p className="text-[13px] font-bold text-err">{error}</p>}
     </div>
   )
 })

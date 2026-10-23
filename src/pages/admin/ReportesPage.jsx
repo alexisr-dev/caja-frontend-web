@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts'
 import { getReporteVentas, getTopProductos, getStockBajo } from '../../api/reportes'
 import Loader from '../../components/common/Loader'
 import { formatSoles } from '../../utils/formatters'
+
+const TOOLTIP_STYLE = { borderRadius: 12, border: '1px solid #E2DDCD', fontWeight: 700 }
+const TICK = { fontSize: 11, fill: '#4F5D6B' }
 
 export default function ReportesPage() {
   const [reporteVentas, setReporteVentas] = useState(null)
@@ -43,89 +46,98 @@ export default function ReportesPage() {
   }))
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold">Reportes</h1>
+    <div className="p-8 space-y-5">
+      <h1 className="page-title">Reportes</h1>
 
-      <div className="flex gap-4 items-center">
-        <div className="flex items-center gap-2 text-sm">
-          <label className="text-gray-600">Desde:</label>
+      <div className="flex flex-wrap gap-4 items-center">
+        <div className="flex items-center gap-2.5 text-sm">
+          <label className="font-bold text-gray-700">Desde:</label>
           <input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm" />
+            className="field tabular-nums font-semibold" />
         </div>
-        <div className="flex items-center gap-2 text-sm">
-          <label className="text-gray-600">Hasta:</label>
+        <div className="flex items-center gap-2.5 text-sm">
+          <label className="font-bold text-gray-700">Hasta:</label>
           <input type="date" value={fechaHasta} onChange={e => setFechaHasta(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm" />
+            className="field tabular-nums font-semibold" />
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl shadow-sm p-4">
-          <p className="text-xs text-gray-500">Total boletas</p>
-          <p className="text-2xl font-bold">{resumen.boletas ?? 0}</p>
+      <div className="panel grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-200 overflow-hidden">
+        <div className="px-5 py-4">
+          <p className="text-[13px] font-bold text-gray-500">Total boletas</p>
+          <p className="font-display text-[44px] font-black leading-none mt-1 tabular-nums">{resumen.boletas ?? 0}</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-4">
-          <p className="text-xs text-gray-500">Total ventas</p>
-          <p className="text-2xl font-bold text-green-600">{formatSoles(resumen.total_ventas ?? 0)}</p>
+        <div className="px-5 py-4">
+          <p className="text-[13px] font-bold text-gray-500">Total ventas</p>
+          <p className="font-display text-[44px] font-black leading-none mt-1 tabular-nums text-ok">{formatSoles(resumen.total_ventas ?? 0)}</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-4">
-          <p className="text-xs text-gray-500">Ticket promedio</p>
-          <p className="text-2xl font-bold text-primary">{formatSoles(resumen.ticket_promedio ?? 0)}</p>
+        <div className="px-5 py-4">
+          <p className="text-[13px] font-bold text-gray-500">Ticket promedio</p>
+          <p className="font-display text-[44px] font-black leading-none mt-1 tabular-nums text-primary">{formatSoles(resumen.ticket_promedio ?? 0)}</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <h2 className="text-lg font-bold mb-4">Ventas por día</h2>
+      <div className="panel p-6">
+        <h2 className="text-lg font-extrabold mb-4">Ventas por día</h2>
         {porDia.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-8">Sin ventas en el período</p>
+          <p className="text-gray-500 text-sm text-center py-8">Sin ventas en el período</p>
         ) : (
           <ResponsiveContainer width="100%" height={280}>
-            <LineChart data={porDia}>
-              <XAxis dataKey="fecha" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip formatter={v => formatSoles(v)} />
-              <Line type="monotone" dataKey="total" stroke="#0ea5e9" strokeWidth={2} dot={false} />
+            <LineChart data={porDia} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
+              <CartesianGrid vertical={false} stroke="#E2DDCD" />
+              <XAxis dataKey="fecha" tick={TICK} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: '#66727F' }} axisLine={false} tickLine={false} />
+              <Tooltip formatter={v => formatSoles(v)} contentStyle={TOOLTIP_STYLE} />
+              <Line
+                type="monotone"
+                dataKey="total"
+                stroke="#0A4A78"
+                strokeWidth={2.5}
+                dot={false}
+                activeDot={{ r: 6, fill: '#F5B31B', stroke: '#16202B', strokeWidth: 2 }}
+              />
             </LineChart>
           </ResponsiveContainer>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-bold mb-4">Top productos más vendidos</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="panel p-6">
+          <h2 className="text-lg font-extrabold mb-4">Top productos más vendidos</h2>
           {topData.length === 0 ? (
-            <p className="text-gray-400 text-sm">Sin datos</p>
+            <p className="text-gray-500 text-sm">Sin datos</p>
           ) : (
             <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={topData} layout="vertical">
-                <XAxis type="number" tick={{ fontSize: 11 }} />
-                <YAxis dataKey="nombre" type="category" tick={{ fontSize: 11 }} width={140} />
-                <Tooltip />
-                <Bar dataKey="ventas" fill="#0ea5e9" radius={[0, 4, 4, 0]} />
+              <BarChart data={topData} layout="vertical" margin={{ top: 0, right: 12, left: 0, bottom: 0 }}>
+                <CartesianGrid horizontal={false} stroke="#E2DDCD" />
+                <XAxis type="number" tick={TICK} axisLine={false} tickLine={false} />
+                <YAxis dataKey="nombre" type="category" tick={{ fontSize: 12, fill: '#16202B' }} width={150} axisLine={false} tickLine={false} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: 'rgba(14,43,68,0.06)' }} />
+                <Bar dataKey="ventas" fill="#9DB8CE" radius={[0, 4, 4, 0]} maxBarSize={22} />
               </BarChart>
             </ResponsiveContainer>
           )}
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-bold mb-1">Stock bajo / agotado</h2>
-          <p className="text-xs text-gray-400 mb-4">
+        <div className="panel p-6">
+          <h2 className="text-lg font-extrabold mb-1">Stock bajo / agotado</h2>
+          <p className="text-[13px] text-gray-500 mb-4">
             {stockBajo?.agotados?.cantidad ?? 0} agotados · {stockBajo?.stock_bajo?.cantidad ?? 0} bajo mínimo
           </p>
-          <div className="space-y-2 overflow-y-auto max-h-56">
+          <div className="overflow-y-auto max-h-56">
             {todosStockBajo.map(p => (
-              <div key={p.sku} className="flex items-center justify-between text-sm py-1 border-b last:border-0">
+              <div key={p.sku} className="flex items-center justify-between text-sm py-2.5 border-b border-gray-200 last:border-0">
                 <div>
-                  <p className="font-medium">{p.nombre}</p>
-                  <p className="text-xs text-gray-400">{p.sku}</p>
+                  <p className="font-extrabold">{p.nombre}</p>
+                  <p className="text-xs text-gray-500 tabular-nums">{p.sku}</p>
                 </div>
                 <div className="text-right">
-                  <p className={`font-bold ${p.stock === 0 ? 'text-red-600' : 'text-yellow-600'}`}>{p.stock} u.</p>
-                  <p className="text-xs text-gray-400">mín. {p.stock_minimo}</p>
+                  <p className={`font-extrabold tabular-nums ${p.stock === 0 ? 'text-err' : 'text-warn'}`}>{p.stock} u.</p>
+                  <p className="text-xs text-gray-500 tabular-nums">mín. {p.stock_minimo}</p>
                 </div>
               </div>
             ))}
-            {todosStockBajo.length === 0 && <p className="text-gray-400 text-sm">Stock en orden</p>}
+            {todosStockBajo.length === 0 && <p className="text-gray-500 text-sm">Stock en orden</p>}
           </div>
         </div>
       </div>

@@ -69,7 +69,7 @@ export default function FlyingImage({ img, from, to, onDone }) {
         pointerEvents: 'none',
         willChange: 'transform, opacity',
       }}
-      className="object-contain bg-white rounded-2xl border border-gray-200 shadow-2xl ring-4 ring-primary/20"
+      className="object-contain bg-white rounded-2xl border border-gray-200 shadow-float ring-4 ring-gold/40"
     />
   )
 }

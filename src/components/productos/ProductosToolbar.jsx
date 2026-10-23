@@ -1,7 +1,6 @@
 import { Search, LayoutGrid, List, Archive } from 'lucide-react'
 
-const selectCls =
-  'border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary'
+const selectCls = 'field cursor-pointer font-semibold'
 
 export default function ProductosToolbar({
   busqueda,
@@ -21,13 +20,13 @@ export default function ProductosToolbar({
   return (
     <div className="flex flex-wrap items-center gap-3">
       <div className="relative flex-1 min-w-[220px]">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
         <input
           type="text"
           placeholder="Buscar por nombre o SKU..."
           value={busqueda}
           onChange={(e) => onBusqueda(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+          className="field w-full pl-10 pr-4"
         />
       </div>
 
@@ -57,29 +56,31 @@ export default function ProductosToolbar({
         onClick={() => onVerEliminados(!verEliminados)}
         title="Los productos eliminados se desactivan, no se borran"
         aria-pressed={verEliminados}
-        className={`flex items-center gap-1.5 border rounded-lg px-3 py-2 text-sm transition-colors ${
+        className={`flex items-center gap-2 h-11 rounded-[10px] px-3.5 text-sm font-bold transition-[background-color,color,box-shadow,transform] duration-150 active:scale-[0.97] ${
           verEliminados
-            ? 'border-primary bg-primary text-white'
-            : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+            ? 'bg-primary text-white'
+            : 'bg-white text-gray-900 shadow-[inset_0_0_0_1.5px_#CBC4AE] hover:bg-gray-50'
         }`}
       >
-        <Archive size={16} />
+        <Archive size={17} />
         Ver eliminados
       </button>
 
-      <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+      <div className="flex items-center h-11 rounded-[10px] bg-sunk p-1 gap-1">
         <button
           onClick={() => onVista('tabla')}
-          className={`p-2 transition-colors ${vista === 'tabla' ? 'bg-primary text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+          className={`w-10 h-full inline-flex items-center justify-center rounded-lg transition-colors ${vista === 'tabla' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
           title="Vista tabla"
+          aria-label="Vista tabla"
           aria-pressed={vista === 'tabla'}
         >
           <List size={18} />
         </button>
         <button
           onClick={() => onVista('tarjetas')}
-          className={`p-2 transition-colors ${vista === 'tarjetas' ? 'bg-primary text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+          className={`w-10 h-full inline-flex items-center justify-center rounded-lg transition-colors ${vista === 'tarjetas' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
           title="Vista tarjetas"
+          aria-label="Vista tarjetas"
           aria-pressed={vista === 'tarjetas'}
         >
           <LayoutGrid size={18} />

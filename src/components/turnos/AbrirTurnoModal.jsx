@@ -30,7 +30,7 @@ export default function AbrirTurnoModal({ open, onClose }) {
   return (
     <Modal open={open} onClose={onClose} title="Abrir turno de caja" size="sm">
       <form onSubmit={handleAbrir} className="space-y-4">
-        <p className="text-sm text-gray-600">
+        <p className="text-[15px] text-gray-600 leading-relaxed">
           Ingresa el monto inicial de efectivo en caja para comenzar el turno.
         </p>
         <Input

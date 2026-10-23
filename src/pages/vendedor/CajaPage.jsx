@@ -9,7 +9,7 @@ import CobroDrawer from '../../components/checkout/CobroDrawer'
 import CameraCapture from '../../components/camera/CameraCapture'
 import Loader from '../../components/common/Loader'
 import { cancelarPendiente } from '../../services/boletaPendiente'
-import { Camera, CameraOff, ScanLine, ShoppingCart, Sparkles } from 'lucide-react'
+import { Camera, CameraOff, ScanLine } from 'lucide-react'
 
 export default function CajaPage() {
   const { turno, loading: loadingTurno } = useTurno()
@@ -73,33 +73,31 @@ export default function CajaPage() {
   if (loadingTurno) return <Loader />
 
   return (
-    <div className="flex h-full bg-gray-50">
-      <div className="relative flex-1 flex flex-col p-6 overflow-hidden">
+    <div className="flex h-full bg-ground p-5">
+      <div className="relative flex-1 min-w-0 flex flex-col panel p-6 mr-5 overflow-hidden">
         {cobroAbierto && (
           <div
-            className="absolute inset-0 z-20 bg-black/30 animate-in fade-in duration-300 cursor-pointer"
+            className="absolute inset-0 z-20 bg-navy/45 animate-fade-in cursor-pointer"
             onClick={handleCerrarCobro}
           />
         )}
 
         <div className="flex items-start justify-between gap-4 mb-5">
           <div>
-            <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-              <Sparkles size={20} className="text-primary" /> Escáner de productos
-            </h1>
+            <h1 className="text-[22px] font-extrabold text-gray-900">Escáner de productos</h1>
             <p className="text-sm text-gray-500 mt-0.5">
               Apunta el producto a la cámara y se agrega solo al carrito
             </p>
           </div>
           <button
             onClick={() => setModoCamera(v => !v)}
-            className={`shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+            className={`shrink-0 flex items-center gap-2 h-11 px-5 rounded-xl text-[15px] font-bold transition-[background-color,transform] duration-150 active:scale-[0.97] ${
               modoCamera
-                ? 'bg-rose-50 text-rose-600 hover:bg-rose-100'
-                : 'bg-primary text-white hover:bg-primary-dark shadow-sm'
+                ? 'bg-err-bg text-err hover:bg-[#F7D5CB]'
+                : 'bg-primary text-white hover:bg-primary-dark'
             }`}
           >
-            {modoCamera ? <CameraOff size={16} /> : <Camera size={16} />}
+            {modoCamera ? <CameraOff size={18} /> : <Camera size={18} />}
             {modoCamera ? 'Detener escáner' : 'Iniciar escáner'}
           </button>
         </div>
@@ -107,27 +105,30 @@ export default function CajaPage() {
         <div className="flex-1 flex items-center justify-center overflow-hidden">
           {modoCamera ? (
             <div ref={cameraWrapRef} className="w-full h-full flex items-center">
-              <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-3">
+              <div className="w-full rounded-2xl bg-sunk p-2.5">
                 <CameraCapture onReconocido={handleReconocido} pausado={cobroAbierto} />
               </div>
             </div>
           ) : (
-            <div className="w-full max-w-3xl">
-              <div className="bg-white rounded-2xl border border-dashed border-gray-200 shadow-sm flex flex-col items-center justify-center text-center py-20 px-6">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-4">
-                  <ScanLine size={30} />
-                </div>
-                <p className="font-semibold text-gray-800">Escáner inactivo</p>
-                <p className="text-sm text-gray-500 mt-1 mb-6 max-w-sm">
-                  Inicia el escáner para reconocer productos con la cámara y agregarlos al carrito automáticamente.
-                </p>
-                <button
-                  onClick={() => setModoCamera(true)}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors shadow-sm"
-                >
-                  <Camera size={16} /> Iniciar escáner
-                </button>
+            <div className="relative w-full h-full min-h-[320px] rounded-2xl bg-sunk flex flex-col items-center justify-center text-center px-6">
+              <span className="viewfinder-corner left-9 top-9 border-t-[5px] border-l-[5px] rounded-tl-[10px]" />
+              <span className="viewfinder-corner right-9 top-9 border-t-[5px] border-r-[5px] rounded-tr-[10px]" />
+              <span className="viewfinder-corner left-9 bottom-9 border-b-[5px] border-l-[5px] rounded-bl-[10px]" />
+              <span className="viewfinder-corner right-9 bottom-9 border-b-[5px] border-r-[5px] rounded-br-[10px]" />
+
+              <div className="w-[72px] h-[72px] rounded-[20px] bg-white text-primary flex items-center justify-center mb-4">
+                <ScanLine size={34} />
               </div>
+              <p className="font-display text-[44px] font-black uppercase leading-none text-gray-900">Escáner inactivo</p>
+              <p className="text-[15px] text-gray-500 mt-3 mb-6 max-w-sm leading-relaxed">
+                Inicia el escáner para reconocer productos con la cámara y agregarlos al carrito automáticamente.
+              </p>
+              <button
+                onClick={() => setModoCamera(true)}
+                className="flex items-center gap-2 h-14 px-7 rounded-xl bg-primary text-white text-[17px] font-bold hover:bg-primary-dark transition-[background-color,transform] duration-150 active:scale-[0.97]"
+              >
+                <Camera size={20} /> Iniciar escáner
+              </button>
             </div>
           )}
         </div>
@@ -135,14 +136,12 @@ export default function CajaPage() {
 
       <aside
         ref={cartRef}
-        className={`w-80 bg-white border-l border-gray-200 flex flex-col ${cartPulse ? 'animate-[cartPulse_450ms_ease]' : ''}`}
+        className={`w-[360px] shrink-0 panel flex flex-col ${cartPulse ? 'animate-[cartPulse_450ms_ease]' : ''}`}
       >
-        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
-            <ShoppingCart size={18} /> Carrito
-          </h2>
+        <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+          <h2 className="text-xl font-extrabold text-gray-900">Carrito</h2>
           {items.length > 0 && (
-            <span className="text-xs font-semibold bg-primary/10 text-primary px-2.5 py-1 rounded-full">
+            <span className="text-xs font-extrabold bg-sky-100 text-[#075985] px-2.5 py-1 rounded-full">
               {items.length} {items.length === 1 ? 'ítem' : 'ítems'}
             </span>
           )}

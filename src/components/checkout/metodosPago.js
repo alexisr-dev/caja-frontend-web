@@ -1,3 +1,4 @@
+import { Banknote, CreditCard } from 'lucide-react'
 import { METODO_PAGO, YAPE_MONTO_MINIMO } from '../../utils/constants'
 import { formatSoles } from '../../utils/formatters'
 import PagoEfectivo from './PagoEfectivo'
@@ -11,14 +12,13 @@ export const METODOS_PAGO = [
     tituloPaso: 'Pago en efectivo',
     etiquetaBoleta: 'Efectivo',
     icono: '💵',
+    Icono: Banknote,
     componente: PagoEfectivo,
     subtitulo: () => 'Cobro directo con vuelto',
     estaDisponible: () => true,
     estilos: {
-      color: 'from-amber-100 to-amber-50',
-      hover: 'hover:border-amber-400 hover:shadow-amber-100/50 focus:ring-amber-100',
-      titleHover: 'group-hover:text-amber-700',
-      arrowHover: 'group-hover:text-amber-400',
+      tile: 'bg-ok text-white',
+      hover: 'hover:border-ok focus-visible:border-ok',
     },
   },
   {
@@ -27,14 +27,13 @@ export const METODOS_PAGO = [
     tituloPaso: 'Pago con tarjeta',
     etiquetaBoleta: 'Tarjeta · Mercado Pago',
     icono: '💳',
+    Icono: CreditCard,
     componente: PagoMPTarjeta,
     subtitulo: () => 'Crédito o débito · Mercado Pago',
     estaDisponible: () => true,
     estilos: {
-      color: 'from-[#009EE3] to-[#0077B6]',
-      hover: 'hover:border-[#009EE3] hover:shadow-[#009EE3]/10 focus:ring-[#009EE3]/20',
-      titleHover: 'group-hover:text-[#009EE3]',
-      arrowHover: 'group-hover:text-[#009EE3]',
+      tile: 'bg-[#0A6BB0] text-white',
+      hover: 'hover:border-[#0A6BB0] focus-visible:border-[#0A6BB0]',
     },
   },
   {
@@ -51,10 +50,8 @@ export const METODOS_PAGO = [
         : `Mínimo ${formatSoles(YAPE_MONTO_MINIMO)}`,
     estaDisponible: (total) => total >= YAPE_MONTO_MINIMO,
     estilos: {
-      color: 'from-purple-500 to-purple-600',
-      hover: 'hover:border-purple-400 hover:shadow-purple-100/50 focus:ring-purple-100',
-      titleHover: 'group-hover:text-purple-700',
-      arrowHover: 'group-hover:text-purple-400',
+      tile: 'bg-[#742284] text-white',
+      hover: 'hover:border-[#742284] focus-visible:border-[#742284]',
     },
   },
 ]

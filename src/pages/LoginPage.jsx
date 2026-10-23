@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { toast } from 'react-toastify'
 import DemoCredencialesPanel from '../components/auth/DemoCredencialesPanel'
+import ScanIllustration from '../components/auth/ScanIllustration'
 import { env } from '../config/env'
 
 export default function LoginPage() {
@@ -63,79 +64,96 @@ export default function LoginPage() {
   const mostrarPanelDemo = env.demo.activo && paso === 'credenciales'
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-10">
-      <div className="w-full max-w-4xl px-4 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6">
-        <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm lg:w-96 shrink-0">
-          <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-primary">Caja Smart</h1>
-            <p className="text-sm text-gray-500 mt-1">Sistema de caja registradora</p>
+    <div className="min-h-screen flex flex-col lg:flex-row bg-ground">
+
+      <section className="lg:w-[420px] lg:shrink-0 bg-navy text-white px-8 py-8 lg:p-11 flex flex-col">
+        <div className="flex items-center gap-3">
+          <img src="/logo.svg" alt="" className="w-10 h-10" />
+          <h1 className="font-display text-[44px] font-black uppercase leading-none tracking-wide">Caja Smart</h1>
+        </div>
+        <p className="text-base text-white/75 mt-3">Sistema de caja registradora</p>
+
+        <div className="hidden lg:flex flex-1 flex-col justify-end pt-8">
+          <ScanIllustration />
+        </div>
+      </section>
+
+      <section className="flex-1 min-w-0 flex items-center justify-center py-10 px-4">
+        <div className="w-full max-w-4xl flex flex-col lg:flex-row items-center lg:items-start justify-center gap-5">
+          <div className="panel p-8 w-full max-w-sm lg:w-[380px] shrink-0">
+            <div className="mb-6">
+              <h2 className="font-display text-[40px] font-black uppercase leading-none tracking-wide">
+                {paso === 'credenciales' ? 'Iniciar sesión' : 'Verificación 2FA'}
+              </h2>
+            </div>
+
+            {paso === 'credenciales' ? (
+              <form onSubmit={handleLogin} className="space-y-4">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  aria-label="Email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className="field w-full h-12"
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Contraseña"
+                  aria-label="Contraseña"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  className="field w-full h-12"
+                  required
+                />
+                <button
+                  type="submit"
+                  disabled={cargando}
+                  className="w-full h-[52px] bg-primary text-white rounded-xl text-base font-extrabold hover:bg-primary-dark disabled:opacity-45 transition-[background-color,transform] duration-150 active:scale-[0.98]"
+                >
+                  {cargando ? 'Entrando...' : 'Ingresar'}
+                </button>
+                <a href="/password-reset" className="block text-sm font-bold text-primary text-center hover:underline">
+                  Olvidé mi contraseña
+                </a>
+              </form>
+            ) : (
+              <form onSubmit={handleVerificar2FA} className="space-y-4">
+                <p className="text-[15px] text-gray-600 leading-relaxed">
+                  Ingresa el código de 6 dígitos enviado a <b>{email}</b>
+                </p>
+                <input
+                  type="text"
+                  placeholder="000000"
+                  aria-label="Código de verificación"
+                  value={codigo2FA}
+                  onChange={e => setCodigo2FA(e.target.value)}
+                  maxLength={6}
+                  className="field w-full h-16 text-center font-display text-[40px] font-extrabold tracking-[0.35em] tabular-nums"
+                  required
+                />
+                <button
+                  type="submit"
+                  disabled={cargando}
+                  className="w-full h-[52px] bg-primary text-white rounded-xl text-base font-extrabold hover:bg-primary-dark disabled:opacity-45 transition-[background-color,transform] duration-150 active:scale-[0.98]"
+                >
+                  {cargando ? 'Verificando...' : 'Verificar'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setPaso('credenciales'); setCodigo2FA('') }}
+                  className="block w-full text-sm font-bold text-gray-500 text-center hover:text-gray-900"
+                >
+                  ← Volver
+                </button>
+              </form>
+            )}
           </div>
 
-          {paso === 'credenciales' ? (
-            <form onSubmit={handleLogin} className="space-y-4">
-              <h2 className="text-xl font-semibold">Iniciar sesión</h2>
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                required
-              />
-              <input
-                type="password"
-                placeholder="Contraseña"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                required
-              />
-              <button
-                type="submit"
-                disabled={cargando}
-                className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary-dark disabled:opacity-50 transition-colors"
-              >
-                {cargando ? 'Entrando...' : 'Ingresar'}
-              </button>
-              <a href="/password-reset" className="block text-sm text-primary text-center hover:underline">
-                Olvidé mi contraseña
-              </a>
-            </form>
-          ) : (
-            <form onSubmit={handleVerificar2FA} className="space-y-4">
-              <h2 className="text-xl font-semibold">Verificación 2FA</h2>
-              <p className="text-sm text-gray-600">
-                Ingresa el código de 6 dígitos enviado a <b>{email}</b>
-              </p>
-              <input
-                type="text"
-                placeholder="000000"
-                value={codigo2FA}
-                onChange={e => setCodigo2FA(e.target.value)}
-                maxLength={6}
-                className="w-full border border-gray-300 rounded-lg p-3 text-center text-2xl tracking-widest focus:outline-none focus:ring-2 focus:ring-primary"
-                required
-              />
-              <button
-                type="submit"
-                disabled={cargando}
-                className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary-dark disabled:opacity-50 transition-colors"
-              >
-                {cargando ? 'Verificando...' : 'Verificar'}
-              </button>
-              <button
-                type="button"
-                onClick={() => { setPaso('credenciales'); setCodigo2FA('') }}
-                className="block w-full text-sm text-gray-500 text-center hover:text-gray-700"
-              >
-                ← Volver
-              </button>
-            </form>
-          )}
+          {mostrarPanelDemo && <DemoCredencialesPanel onUsar={usarCredencialesDemo} />}
         </div>
-
-        {mostrarPanelDemo && <DemoCredencialesPanel onUsar={usarCredencialesDemo} />}
-      </div>
+      </section>
     </div>
   )
 }

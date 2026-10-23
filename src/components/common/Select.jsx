@@ -1,7 +1,7 @@
 export default function Select({ label, options, className = '', children, ...props }) {
   const select = (
     <select
-      className={`border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${className}`}
+      className={`field cursor-pointer font-semibold ${className}`}
       {...props}
     >
       {options
@@ -13,8 +13,8 @@ export default function Select({ label, options, className = '', children, ...pr
   if (!label) return select
 
   return (
-    <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-gray-700">{label}</label>
+    <div className="flex flex-col gap-1.5">
+      <label className="field-label">{label}</label>
       {select}
     </div>
   )

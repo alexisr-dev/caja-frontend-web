@@ -3,7 +3,147 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-ground text-gray-900 font-sans;
+  }
+
+  ::selection {
+    background: rgba(245, 179, 27, 0.45);
+  }
+
+  :focus-visible {
+    outline: 2px solid #0ea5e9;
+    outline-offset: 2px;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    margin: 0;
+  }
+}
+
+@layer components {
+  /* Título de página: cifras y títulos en Big Shoulders. */
+  .page-title {
+    @apply font-display text-[48px] font-black uppercase leading-none tracking-wide text-gray-900;
+  }
+
+  .modal-title {
+    @apply font-display text-[32px] font-extrabold uppercase leading-none tracking-wide text-gray-900;
+  }
+
+  /* Campos de formulario: una sola altura y un solo foco para todo. */
+  .field {
+    @apply h-11 rounded-[10px] border-[1.5px] border-gray-300 bg-white px-3.5 text-[15px] text-gray-900 outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-gray-400 focus:border-primary focus:ring-4 focus:ring-sky-500/15 disabled:bg-sunk disabled:text-gray-400;
+  }
+
+  .field-error {
+    @apply border-err focus:border-err focus:ring-err/15;
+  }
+
+  .field-label {
+    @apply text-[13px] font-bold text-gray-900;
+  }
+
+  .panel {
+    @apply rounded-2xl border border-gray-200 bg-white;
+  }
+
+  .th-cell {
+    @apply px-4 py-3 text-xs font-bold text-gray-500;
+  }
+
+  /* Gesto firma: la etiqueta de precio. Solo para precios y selección. */
+  .tag-price {
+    position: relative;
+    background: #f5b31b;
+    color: #16202b;
+    padding-left: 46px;
+    clip-path: polygon(18px 0, 100% 0, 100% 100%, 18px 100%, 0 50%);
+  }
+
+  .tag-price::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border-radius: 9999px;
+    background: var(--tag-hole, #ffffff);
+    box-shadow: inset 0 0 0 2px #16202b;
+  }
+
+  .tag-price-muted {
+    background: #ede9dc;
+    color: #66727f;
+  }
+
+  .tag-price-muted::before {
+    box-shadow: none;
+  }
+
+  .tag-chip {
+    padding-left: 18px;
+    clip-path: polygon(9px 0, 100% 0, 100% 100%, 9px 100%, 0 50%);
+  }
+
+  .tag-nav {
+    padding-left: 22px;
+    clip-path: polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  }
+
+  .tag-tab {
+    padding-left: 26px;
+    clip-path: polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  }
+
+  /* Esquinas de visor, el mismo lenguaje del reconocimiento por cámara. */
+  .viewfinder-corner {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    border: 0 solid #f5b31b;
+  }
+}
+
+/* react-toastify: mismas notificaciones, con la paleta nueva. */
+:root {
+  --toastify-color-success: #46d27b;
+  --toastify-color-error: #ff8a70;
+  --toastify-color-warning: #f5b31b;
+  --toastify-color-info: #0ea5e9;
+  --toastify-icon-color-success: #46d27b;
+  --toastify-icon-color-error: #ff8a70;
+  --toastify-icon-color-warning: #f5b31b;
+  --toastify-icon-color-info: #0ea5e9;
+}
+
+.Toastify__toast {
+  border-radius: 14px;
+  background: #0e2b44;
+  color: #ffffff;
+  font-family: inherit;
+  font-weight: 600;
+  box-shadow: 0 14px 30px -10px rgba(22, 32, 43, 0.45);
+}
+
+.Toastify__close-button {
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
